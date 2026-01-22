@@ -17,4 +17,4 @@ random site made by kirilldual
 
 
 
-Now it is a website designed for Kolyadual
+now it is runget-simulator clone 
