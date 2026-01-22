@@ -725,33 +725,79 @@
 
         // ==================== STARTUP SOUND ====================
         function playStartupSound() {
-            const audio = new Audio('https://docs.google.com/uc?export=download&id=1oUEGayyu0t--POU-rOBxPxejpR02_d7f');
+            const audio = new Audio('DCS-startup.mp3');
             audio.volume = 0.5;
             audio.play().catch(e => {
-                // Fallback to Web Audio API if Google Drive doesn't work
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [
-                    { freq: 261.63, start: 0, duration: 0.3 },
-                    { freq: 329.63, start: 0.1, duration: 0.3 },
-                    { freq: 392.00, start: 0.2, duration: 0.3 },
-                    { freq: 523.25, start: 0.3, duration: 0.5 },
-                    { freq: 659.25, start: 0.4, duration: 0.5 },
-                    { freq: 783.99, start: 0.5, duration: 0.6 },
-                ];
-                notes.forEach(note => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(note.freq, audioCtx.currentTime + note.start);
-                    gain.gain.setValueAtTime(0, audioCtx.currentTime + note.start);
-                    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + note.start + 0.05);
-                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + note.start + note.duration);
-                    osc.start(audioCtx.currentTime + note.start);
-                    osc.stop(audioCtx.currentTime + note.start + note.duration);
-                });
+                console.log('Could not play startup sound:', e);
             });
+        }
+
+        // ==================== SHUTDOWN ====================
+        async function shutdownSystem() {
+            // Hide desktop and taskbar
+            document.getElementById('desktop').style.display = 'none';
+            document.getElementById('taskbar').style.display = 'none';
+            
+            // Show console
+            const consoleEl = document.getElementById('bootConsole');
+            consoleEl.style.display = 'block';
+            consoleEl.innerHTML = '';
+            
+            const lines = [
+                { text: '', delay: 300 },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '              DUAL COMPUTERS SYSTEMS - SHUTDOWN', class: 'bright' },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '', delay: 200 },
+                { text: 'Initiating system shutdown...', class: 'white', delay: 500 },
+                { text: '', delay: 100 },
+                { text: '[SERVICES] Stopping system services...', delay: 300 },
+                { text: '  > network-manager stopped', class: 'dim', delay: 100 },
+                { text: '  > audio-server stopped', class: 'dim', delay: 100 },
+                { text: '  > window-manager stopped', class: 'dim', delay: 100 },
+                { text: '  > dcs-daemon stopped', class: 'dim', delay: 100 },
+                { text: '[SERVICES] All services stopped', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[DESKTOP] Closing user session...', delay: 400 },
+                { text: '[DESKTOP] Session closed', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[DISK] Unmounting filesystems...', delay: 300 },
+                { text: '  > /dev/sda2 unmounted from /home', class: 'dim', delay: 100 },
+                { text: '  > /dev/sda1 unmounted from /', class: 'dim', delay: 100 },
+                { text: '[DISK] Filesystems unmounted', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[MEMORY] Clearing RAM...', delay: 300 },
+                { text: '  > Memory banks cleared', class: 'dim', delay: 150 },
+                { text: '[MEMORY] RAM cleared', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[HARDWARE] Powering down devices...', delay: 400 },
+                { text: '  > GPU powered off', class: 'dim', delay: 100 },
+                { text: '  > USB controllers powered off', class: 'dim', delay: 100 },
+                { text: '  > Network interfaces powered off', class: 'dim', delay: 100 },
+                { text: '[HARDWARE] All devices powered off', class: 'bright', delay: 200 },
+                { text: '', delay: 200 },
+                { text: '[KERNEL] Unloading kernel modules...', delay: 300 },
+                { text: '[KERNEL] Kernel unloaded', class: 'bright', delay: 200 },
+                { text: '', delay: 300 },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '  DUAL COMPUTERS SYSTEMS - POWER OFF', class: 'bright' },
+                { text: '  Reload page to restart the system', class: 'dim' },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '', delay: 500 }
+            ];
+
+            for (const line of lines) {
+                const div = document.createElement('div');
+                div.className = 'console-line ' + (line.class || '');
+                div.textContent = line.text;
+                consoleEl.appendChild(div);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                await new Promise(r => setTimeout(r, line.delay || 50));
+            }
+            
+            // Final black screen with message
+            await new Promise(r => setTimeout(r, 1000));
+            consoleEl.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="color:var(--purple-glow);font-size:16px;margin-bottom:10px">System is powered off</div><div style="color:var(--text-secondary);font-size:12px">Reload page to restart</div></div>';
         }
 
         // ==================== BOOT SEQUENCE ====================
@@ -857,7 +903,8 @@
             const icons = [
                 { name: 'Разное', icon: 'fa-folder', action: () => openMiscFolder() },
                 { name: 'Терминал', icon: 'fa-terminal', action: () => openApp('terminal') },
-                { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') }
+                { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') },
+                { name: 'Turn Off', icon: 'fa-power-off', action: () => shutdownSystem() }
             ];
 
             icons.forEach(icon => {
