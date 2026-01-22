@@ -771,26 +771,15 @@
         ];
 
         // ==================== CLICK SOUND ====================
-        let clickSoundEnabled = false;
         let firstClickTime = null;
-        const clickAudio = new Audio('click.mp3');
-        clickAudio.volume = 0.3;
 
         function initClickSound() {
             firstClickTime = Date.now();
             
             document.addEventListener('click', () => {
-                if (clickSoundEnabled && firstClickTime && (Date.now() - firstClickTime > 10000)) {
-                    const sound = clickAudio.cloneNode();
+                if (firstClickTime && (Date.now() - firstClickTime > 10000)) {
+                    const sound = new Audio('click.mp3');
                     sound.volume = 0.3;
-                    sound.play().catch(() => {});
-                }
-            });
-            
-            document.addEventListener('mousedown', () => {
-                if (clickSoundEnabled && firstClickTime && (Date.now() - firstClickTime > 10000)) {
-                    const sound = clickAudio.cloneNode();
-                    sound.volume = 0.2;
                     sound.play().catch(() => {});
                 }
             });
@@ -1720,7 +1709,6 @@
             
             // Initialize click sound system
             initClickSound();
-            clickSoundEnabled = true;
             
             boot();
         });
