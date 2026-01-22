@@ -85,6 +85,46 @@
             51%, 100% { opacity: 0; }
         }
 
+        /* Click to Start Screen */
+        #clickToStart {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #clickToStart .logo {
+            font-size: 80px;
+            font-weight: bold;
+            color: var(--purple-bright);
+            text-shadow: 0 0 20px var(--purple-medium), 0 0 40px var(--purple-dark);
+            margin-bottom: 40px;
+            font-family: 'Consolas', monospace;
+        }
+
+        #clickToStart .click-text {
+            font-size: 24px;
+            color: var(--purple-glow);
+            animation: pulse 2s infinite;
+            font-family: 'Consolas', monospace;
+        }
+
+        #clickToStart .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 15px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         /* Desktop */
         #desktop {
             position: fixed;
@@ -639,8 +679,15 @@
     </style>
 </head>
 <body>
+    <!-- Click to Start -->
+    <div id="clickToStart">
+        <div class="logo">DCS</div>
+        <div class="click-text">[ CLICK TO START ]</div>
+        <div class="subtitle">Dual Computers Systems v1.0</div>
+    </div>
+
     <!-- Boot Console -->
-    <div id="bootConsole"></div>
+    <div id="bootConsole" style="display:none;"></div>
 
     <!-- Desktop -->
     <div id="desktop">
@@ -804,6 +851,23 @@
         async function boot() {
             const console = document.getElementById('bootConsole');
             const lines = [
+                { text: '', delay: 300 },
+                { text: '                    ╔══════════════════════════════╗', class: 'bright' },
+                { text: '                    ║  ┌────────────────────────┐  ║', class: 'bright' },
+                { text: '                    ║  │ ████████████████████ │  ║', class: 'bright' },
+                { text: '                    ║  │ ██                ██ │  ║', class: 'bright' },
+                { text: '                    ║  │ ██   DUAL         ██ │  ║', class: 'bright' },
+                { text: '                    ║  │ ██   COMPUTERS    ██ │  ║', class: 'bright' },
+                { text: '                    ║  │ ██   SYSTEMS      ██ │  ║', class: 'bright' },
+                { text: '                    ║  │ ██                ██ │  ║', class: 'bright' },
+                { text: '                    ║  │ ████████████████████ │  ║', class: 'bright' },
+                { text: '                    ║  └────────────────────────┘  ║', class: 'bright' },
+                { text: '                    ║     ┌──┐   DCS    ┌──┐      ║', class: 'bright' },
+                { text: '                    ║     │◉◉│          │◉◉│      ║', class: 'bright' },
+                { text: '                    ╚══════════════════════════════╝', class: 'bright' },
+                { text: '                          ╔══════════════╗', class: 'bright' },
+                { text: '                          ║ ▓▓▓▓▓▓▓▓▓▓▓▓ ║', class: 'bright' },
+                { text: '                          ╚══════════════╝', class: 'bright' },
                 { text: '', delay: 500 },
                 { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
                 { text: '              DUAL COMPUTERS SYSTEMS - BOOT SEQUENCE', class: 'bright' },
@@ -1252,23 +1316,27 @@
                             whoami: () => 'user',
                             neofetch: () => `
 <span style="color:var(--purple-glow)">
-      RRRRRRRRRRRRRRRRRR
-      RR::::::::::::::RR
-      RR::::RRRRRR:::::RR
-      RR:::RR     RR:::RR
-      RR:::RR     RR:::RR       </span><span style="color:var(--purple-bright)">user@dcs</span>
-<span style="color:var(--purple-glow)">      RR:::RRRRRR:::::RR       </span>--------------------------
-<span style="color:var(--purple-glow)">      RR::::::::::::::RR       </span><span style="color:var(--purple-bright)">OS:</span> Dual Computers Systems 1.0
-<span style="color:var(--purple-glow)">      RR:::RRRRRR::RR          </span><span style="color:var(--purple-bright)">Host:</span> DCS Virtual Machine
-<span style="color:var(--purple-glow)">      RR:::RR    RR::RR        </span><span style="color:var(--purple-bright)">Kernel:</span> 6.2.0-dcs
-<span style="color:var(--purple-glow)">      RR:::RR     RR::RR       </span><span style="color:var(--purple-bright)">Uptime:</span> ${Math.floor(performance.now()/60000)} mins
-<span style="color:var(--purple-glow)">      RR:::RR      RR::RR      </span><span style="color:var(--purple-bright)">Shell:</span> dcs-shell
-<span style="color:var(--purple-glow)">      RR:::RR       RR::RR     </span><span style="color:var(--purple-bright)">Resolution:</span> ${window.innerWidth}x${window.innerHeight}
-<span style="color:var(--purple-glow)">      RRRRRR         RRRRRR    </span><span style="color:var(--purple-bright)">DE:</span> DCS Desktop
-                                <span style="color:var(--purple-bright)">Theme:</span> Dark Matter
-                                <span style="color:var(--purple-bright)">Terminal:</span> dcs-term
-                                <span style="color:var(--purple-bright)">CPU:</span> Virtual (${navigator.hardwareConcurrency} cores)
-                                <span style="color:var(--purple-bright)">Memory:</span> 16384 MB
+        ╔══════════════════════════════╗
+        ║  ┌────────────────────────┐  ║
+        ║  │ <span style="color:var(--purple-bright)">████████████████████</span> │  ║       </span><span style="color:var(--purple-bright)">user@dcs</span>
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span>--------------------------
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span><span style="color:var(--purple-bright)">OS:</span> Dual Computers Systems 1.0
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span><span style="color:var(--purple-bright)">Host:</span> DCS Virtual Machine
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span><span style="color:var(--purple-bright)">Kernel:</span> 6.2.0-dcs
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span><span style="color:var(--purple-bright)">Uptime:</span> ${Math.floor(performance.now()/60000)} mins
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">██                ██</span> │  ║       </span><span style="color:var(--purple-bright)">Packages:</span> 847 (dpkg)
+<span style="color:var(--purple-glow)">        ║  │ <span style="color:var(--purple-bright)">████████████████████</span> │  ║       </span><span style="color:var(--purple-bright)">Shell:</span> dcs-shell
+<span style="color:var(--purple-glow)">        ║  └────────────────────────┘  ║       </span><span style="color:var(--purple-bright)">Resolution:</span> ${window.innerWidth}x${window.innerHeight}
+<span style="color:var(--purple-glow)">        ║     ┌──┐   <span style="color:var(--purple-bright)">DCS</span>    ┌──┐      ║       </span><span style="color:var(--purple-bright)">DE:</span> DCS Desktop
+<span style="color:var(--purple-glow)">        ║     │◉◉│          │◉◉│      ║       </span><span style="color:var(--purple-bright)">WM:</span> dcs-wm
+<span style="color:var(--purple-glow)">        ╚══════════════════════════════╝       </span><span style="color:var(--purple-bright)">Theme:</span> Dark Matter [dark]
+<span style="color:var(--purple-glow)">              ╔══════════════╗                 </span><span style="color:var(--purple-bright)">Icons:</span> DCS-Purple
+<span style="color:var(--purple-glow)">              ║ ▓▓▓▓▓▓▓▓▓▓▓▓ ║                 </span><span style="color:var(--purple-bright)">Terminal:</span> dcs-term
+<span style="color:var(--purple-glow)">              ╚══════════════╝                 </span><span style="color:var(--purple-bright)">CPU:</span> Virtual (${navigator.hardwareConcurrency} cores)
+<span style="color:var(--purple-glow)">                                               </span><span style="color:var(--purple-bright)">GPU:</span> DCS Graphics Adapter
+<span style="color:var(--purple-glow)">                                               </span><span style="color:var(--purple-bright)">Memory:</span> 4096 MB / 16384 MB
+
+                                               <span style="color:#2d1b4e">███</span><span style="color:#4a2c7a">███</span><span style="color:#6b3fa0">███</span><span style="color:#8b5cf6">███</span><span style="color:#a78bfa">███</span><span style="color:#c4b5fd">███</span><span style="color:#333">███</span><span style="color:#666">███</span>
 `
                         };
                         const result = commands[command] ? commands[command]() : `${command}: command not found`;
@@ -1619,8 +1687,12 @@
             init(); render();
         }
 
-        // Start boot
-        boot();
+        // Wait for click to start
+        document.getElementById('clickToStart').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('bootConsole').style.display = 'block';
+            boot();
+        });
     </script>
 </body>
 </html>
