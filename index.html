@@ -776,9 +776,13 @@
         function initClickSound() {
             firstClickTime = Date.now();
             
-            document.addEventListener('click', () => {
+            document.addEventListener('click', function() {
                 if (firstClickTime && (Date.now() - firstClickTime > 10000)) {
-                    new Audio('click.mp3').play().catch(() => {});
+                    const clickSound = new Audio('click.mp3');
+                    clickSound.volume = 0.5;
+                    clickSound.play().catch(function(e) {
+                        console.log('Click sound error:', e);
+                    });
                 }
             });
         }
