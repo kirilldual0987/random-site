@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dual Computers Systems</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&family=MS+Sans+Serif&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
+        @font-face {
+            font-family: 'MS Sans Serif';
+            src: local('Tahoma'), local('Arial');
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,24 +21,25 @@
         }
 
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-medium: #12121a;
-            --bg-light: #1a1a2e;
+            --bg-black: #0a0a0a;
+            --bg-dark: #121212;
+            --bg-medium: #1a1a1a;
+            --bg-light: #252525;
             --purple-dark: #2d1b4e;
             --purple-medium: #4a2c7a;
             --purple-light: #6b3fa0;
             --purple-bright: #8b5cf6;
             --purple-glow: #a78bfa;
-            --text-primary: #e8e8f0;
-            --text-secondary: #9898a8;
-            --border-color: #2a2a3e;
-            --success: #10b981;
-            --error: #ef4444;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --border-dark: #0a0a0a;
+            --border-light: #3a3a3a;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            font-size: 11px;
+            background: var(--bg-black);
             color: var(--text-primary);
             overflow: hidden;
             height: 100vh;
@@ -46,26 +52,32 @@
             background: #000;
             z-index: 10000;
             padding: 20px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
             font-size: 14px;
             overflow: hidden;
         }
 
         .console-line {
-            color: #00ff00;
+            color: var(--purple-bright);
             margin-bottom: 2px;
             opacity: 0;
             animation: fadeIn 0.1s forwards;
         }
 
-        .console-line.purple { color: var(--purple-bright); }
-        .console-line.white { color: #fff; }
+        .console-line.white { color: #e0e0e0; }
         .console-line.dim { color: #666; }
-        .console-line.success { color: var(--success); }
-        .console-line.error { color: var(--error); }
+        .console-line.bright { color: var(--purple-glow); }
 
         @keyframes fadeIn {
             to { opacity: 1; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: var(--purple-bright);
+            animation: blink 0.5s infinite;
         }
 
         @keyframes blink {
@@ -73,499 +85,447 @@
             51%, 100% { opacity: 0; }
         }
 
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 18px;
-            background: #00ff00;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-        }
-
         /* Desktop */
         #desktop {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--purple-dark) 50%, var(--bg-medium) 100%);
+            bottom: 32px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1020 50%, #0a0a0a 100%);
             display: none;
         }
 
         #desktopIcons {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            display: grid;
-            grid-template-columns: repeat(2, 90px);
-            gap: 10px;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
         .desktop-icon {
-            width: 90px;
-            padding: 15px 10px;
-            border-radius: 12px;
+            width: 70px;
+            padding: 5px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s;
             border: 1px solid transparent;
         }
 
         .desktop-icon:hover {
-            background: rgba(139, 92, 246, 0.15);
+            background: rgba(139, 92, 246, 0.2);
             border-color: var(--purple-medium);
         }
 
         .desktop-icon.selected {
-            background: rgba(139, 92, 246, 0.25);
+            background: var(--purple-dark);
             border-color: var(--purple-bright);
         }
 
         .desktop-icon-img {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 8px;
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--purple-medium), var(--purple-dark));
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            background: var(--purple-dark);
+            border: 1px solid var(--purple-medium);
         }
 
         .desktop-icon-img i {
-            font-size: 24px;
-            color: var(--purple-glow);
+            font-size: 18px;
+            color: var(--purple-bright);
         }
 
         .desktop-icon-name {
             color: var(--text-primary);
-            font-size: 11px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            font-size: 10px;
             word-wrap: break-word;
-            line-height: 1.3;
+            text-shadow: 1px 1px 1px #000;
         }
 
-        /* Mini Panel */
-        #miniPanel {
+        /* Taskbar - Windows 2000 style */
+        #taskbar {
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(18, 18, 26, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            padding: 8px 20px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-medium) 50%, var(--bg-dark) 100%);
+            border-top: 2px solid var(--purple-medium);
             display: flex;
             align-items: center;
-            gap: 20px;
-            border: 1px solid var(--purple-medium);
-            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2);
+            padding: 0 4px;
             z-index: 1000;
         }
 
-        #clockDisplay {
-            color: var(--purple-glow);
-            font-size: 18px;
-            font-weight: 500;
-            font-family: 'JetBrains Mono', monospace;
+        #taskbarWindows {
+            flex: 1;
+            display: flex;
+            gap: 2px;
+            padding: 0 4px;
         }
 
-        #toggleWindows {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--purple-medium), var(--purple-dark));
-            border: none;
+        .taskbar-item {
+            height: 24px;
+            padding: 0 8px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+            border: 2px outset var(--border-light);
+            color: var(--text-primary);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            max-width: 140px;
+            overflow: hidden;
+        }
+
+        .taskbar-item.active {
+            border-style: inset;
+            background: linear-gradient(180deg, var(--purple-dark) 0%, var(--bg-dark) 100%);
+        }
+
+        .taskbar-item i {
+            color: var(--purple-bright);
+            font-size: 11px;
+        }
+
+        #taskbarRight {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .taskbar-btn {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+            border: 2px outset var(--border-light);
+            color: var(--purple-bright);
+            font-size: 11px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .taskbar-btn:active {
+            border-style: inset;
+        }
+
+        .taskbar-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        #clockArea {
+            height: 24px;
+            padding: 0 8px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #000 100%);
+            border: 2px inset var(--border-light);
             color: var(--purple-glow);
-            font-size: 16px;
-            transition: all 0.2s;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            font-family: 'Consolas', monospace;
         }
 
-        #toggleWindows:hover {
-            background: linear-gradient(135deg, var(--purple-light), var(--purple-medium));
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-        }
-
-        /* Windows */
+        /* Windows - Windows 2000 style */
         .window {
             position: absolute;
             background: var(--bg-medium);
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.1);
-            border: 1px solid var(--purple-medium);
+            border: 2px outset var(--border-light);
             display: flex;
             flex-direction: column;
-            min-width: 350px;
-            min-height: 250px;
-            overflow: hidden;
-        }
-
-        .window.inactive {
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            border-color: var(--border-color);
-        }
-
-        .window-header {
-            height: 44px;
-            background: linear-gradient(135deg, var(--purple-dark), var(--bg-light));
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            cursor: move;
-            border-bottom: 1px solid var(--purple-medium);
-            flex-shrink: 0;
+            min-width: 300px;
+            min-height: 200px;
         }
 
         .window.inactive .window-header {
-            background: var(--bg-light);
+            background: linear-gradient(180deg, #333 0%, #222 100%);
+        }
+
+        .window-header {
+            height: 22px;
+            background: linear-gradient(180deg, var(--purple-medium) 0%, var(--purple-dark) 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 3px;
+            cursor: move;
+            flex-shrink: 0;
         }
 
         .window-icon {
-            font-size: 18px;
-            margin-right: 12px;
+            font-size: 12px;
+            margin-right: 5px;
             color: var(--purple-glow);
         }
 
         .window-title {
             flex: 1;
             color: var(--text-primary);
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .window.inactive .window-title {
-            color: var(--text-secondary);
-        }
-
         .window-controls {
             display: flex;
-            gap: 10px;
+            gap: 2px;
         }
 
         .window-btn {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: none;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+            border: 2px outset var(--border-light);
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 8px;
-            color: transparent;
+            font-size: 9px;
+            color: var(--text-primary);
+        }
+
+        .window-btn:active {
+            border-style: inset;
         }
 
         .window-btn:hover {
-            transform: scale(1.2);
-            color: rgba(0,0,0,0.6);
+            background: var(--purple-dark);
         }
-
-        .window-btn-minimize { background: #9333ea; }
-        .window-btn-maximize { background: #7c3aed; }
-        .window-btn-close { background: #6b21a8; }
-
-        .window-btn-minimize:hover { background: #a855f7; }
-        .window-btn-maximize:hover { background: #8b5cf6; }
-        .window-btn-close:hover { background: #ef4444; }
 
         .window-content {
             flex: 1;
             overflow: auto;
             background: var(--bg-dark);
+            border: 2px inset var(--border-light);
+            margin: 3px;
         }
 
         .window-resize {
             position: absolute;
             right: 0;
             bottom: 0;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             cursor: se-resize;
+            background: linear-gradient(135deg, transparent 50%, var(--purple-dark) 50%);
         }
 
         /* Context Menu */
         #contextMenu {
             position: fixed;
-            background: rgba(18, 18, 26, 0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            border: 1px solid var(--purple-medium);
+            background: var(--bg-medium);
+            border: 2px outset var(--border-light);
             display: none;
             z-index: 5000;
-            min-width: 200px;
-            padding: 8px;
+            min-width: 180px;
+            padding: 2px;
         }
 
         .context-item {
-            padding: 12px 16px;
+            padding: 5px 20px;
             color: var(--text-primary);
-            font-size: 13px;
-            border-radius: 8px;
+            font-size: 11px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
-            transition: all 0.15s;
+            gap: 10px;
         }
 
         .context-item:hover {
-            background: var(--purple-medium);
+            background: var(--purple-dark);
         }
 
         .context-item i {
-            width: 18px;
+            width: 14px;
             text-align: center;
-            color: var(--purple-glow);
+            color: var(--purple-bright);
         }
 
         .context-separator {
             height: 1px;
-            background: var(--border-color);
-            margin: 8px 0;
-        }
-
-        /* Notifications */
-        #notifications {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 6000;
-        }
-
-        .notification {
-            background: rgba(18, 18, 26, 0.98);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--purple-medium);
-            border-radius: 12px;
-            padding: 16px 20px;
-            min-width: 300px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            animation: slideIn 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .notification-icon { font-size: 20px; color: var(--purple-glow); }
-        .notification-text { color: var(--text-primary); font-size: 13px; flex: 1; }
-        .notification-close {
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 5px;
+            background: var(--border-light);
+            margin: 3px 2px;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--purple-dark); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--purple-medium); }
+        ::-webkit-scrollbar { width: 16px; height: 16px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); border: 1px inset var(--border-light); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%); border: 2px outset var(--border-light); }
+        ::-webkit-scrollbar-button { background: var(--bg-medium); border: 2px outset var(--border-light); height: 16px; }
 
         /* App Styles */
         .app-toolbar {
             background: var(--bg-medium);
-            padding: 10px 15px;
+            padding: 3px;
             display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
+            gap: 2px;
+            border-bottom: 2px groove var(--border-light);
         }
 
         .app-btn {
-            padding: 8px 16px;
-            background: var(--purple-dark);
-            border: 1px solid var(--purple-medium);
-            border-radius: 8px;
+            padding: 3px 10px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+            border: 2px outset var(--border-light);
             color: var(--text-primary);
-            font-size: 12px;
+            font-size: 10px;
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
 
-        .app-btn:hover {
-            background: var(--purple-medium);
-            border-color: var(--purple-light);
-        }
-
-        .app-btn i { color: var(--purple-glow); }
+        .app-btn:active { border-style: inset; }
+        .app-btn:hover { background: var(--purple-dark); }
+        .app-btn i { color: var(--purple-bright); }
 
         .app-input {
-            padding: 10px 16px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            padding: 3px 5px;
+            background: var(--bg-black);
+            border: 2px inset var(--border-light);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 11px;
             outline: none;
-            transition: all 0.2s;
-        }
-
-        .app-input:focus {
-            border-color: var(--purple-bright);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
         }
 
         /* File Manager */
         .fm-sidebar {
-            width: 200px;
+            width: 150px;
             background: var(--bg-medium);
-            border-right: 1px solid var(--border-color);
-            padding: 15px;
-            overflow-y: auto;
+            border-right: 2px groove var(--border-light);
+            padding: 5px;
         }
 
         .fm-section-title {
-            color: var(--text-secondary);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 10px 0 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--purple-bright);
+            font-size: 10px;
+            font-weight: bold;
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 5px;
         }
 
         .fm-item {
-            padding: 10px 12px;
+            padding: 3px 5px;
             color: var(--text-primary);
-            font-size: 13px;
-            border-radius: 8px;
+            font-size: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: all 0.15s;
-            margin-bottom: 4px;
+            gap: 5px;
         }
 
-        .fm-item:hover { background: rgba(139, 92, 246, 0.15); }
+        .fm-item:hover { background: var(--purple-dark); }
         .fm-item.active { background: var(--purple-medium); }
-        .fm-item i { color: var(--purple-glow); font-size: 16px; }
+        .fm-item i { color: var(--purple-bright); font-size: 12px; }
 
         .fm-content {
             flex: 1;
-            padding: 15px;
+            padding: 10px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 5px;
             align-content: start;
             overflow-y: auto;
         }
 
         .fm-file {
-            padding: 15px 10px;
-            border-radius: 10px;
+            padding: 5px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.15s;
             border: 1px solid transparent;
         }
 
         .fm-file:hover { 
-            background: rgba(139, 92, 246, 0.1); 
-            border-color: var(--purple-dark);
-        }
-        .fm-file.selected { 
             background: rgba(139, 92, 246, 0.2); 
             border-color: var(--purple-medium);
         }
 
+        .fm-file.selected { 
+            background: var(--purple-dark); 
+            border-color: var(--purple-bright);
+        }
+
         .fm-file-icon {
-            font-size: 40px;
-            margin-bottom: 8px;
-            color: var(--purple-glow);
+            font-size: 28px;
+            margin-bottom: 3px;
+            color: var(--purple-bright);
         }
 
         .fm-file-name { 
             color: var(--text-primary); 
-            font-size: 11px; 
+            font-size: 9px; 
             word-break: break-word; 
         }
 
         /* Terminal */
         .terminal {
             background: #000;
-            color: #0f0;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            padding: 15px;
+            color: var(--purple-bright);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            padding: 10px;
             height: 100%;
             overflow-y: auto;
         }
 
-        .terminal-line { margin-bottom: 3px; white-space: pre-wrap; }
+        .terminal-line { margin-bottom: 2px; white-space: pre-wrap; }
         .terminal-prompt { color: var(--purple-glow); }
         .terminal-path { color: var(--purple-bright); }
         .terminal-input {
             background: transparent;
             border: none;
-            color: #0f0;
+            color: var(--purple-bright);
             font-family: inherit;
             font-size: inherit;
             outline: none;
-            width: calc(100% - 250px);
+            width: calc(100% - 200px);
         }
 
-        /* Folder Grid (для папки Разное) */
+        /* Folder Grid */
         .folder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            padding: 15px;
         }
 
         .folder-app {
-            padding: 20px 15px;
-            border-radius: 12px;
+            padding: 10px 5px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s;
             border: 1px solid transparent;
         }
 
         .folder-app:hover {
-            background: rgba(139, 92, 246, 0.15);
+            background: rgba(139, 92, 246, 0.2);
             border-color: var(--purple-medium);
         }
 
         .folder-app-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 10px;
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--purple-medium), var(--purple-dark));
-            border-radius: 14px;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+            background: var(--purple-dark);
+            border: 1px solid var(--purple-medium);
         }
 
         .folder-app-icon i {
-            font-size: 26px;
-            color: var(--purple-glow);
+            font-size: 16px;
+            color: var(--purple-bright);
         }
 
         .folder-app-name {
             color: var(--text-primary);
-            font-size: 12px;
+            font-size: 9px;
         }
 
         /* Game Container */
@@ -575,14 +535,13 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background: var(--bg-dark);
-            padding: 20px;
+            background: var(--bg-black);
+            padding: 10px;
         }
 
         .game-canvas {
-            border: 2px solid var(--purple-medium);
-            border-radius: 8px;
-            background: #0a0a0f;
+            border: 2px inset var(--border-light);
+            background: #000;
         }
 
         .game-info {
@@ -591,98 +550,92 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .game-score {
             color: var(--purple-glow);
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         /* Settings */
         .settings-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            padding: 20px;
+            gap: 10px;
+            padding: 15px;
         }
 
         .wallpaper-option {
-            border-radius: 12px;
-            overflow: hidden;
+            border: 2px outset var(--border-light);
             cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s;
         }
 
         .wallpaper-option:hover {
-            transform: scale(1.03);
-            border-color: var(--purple-light);
+            border-color: var(--purple-medium);
         }
 
         .wallpaper-option.active {
-            border-color: var(--purple-bright);
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            border: 2px solid var(--purple-bright);
         }
 
         .wallpaper-preview {
-            height: 80px;
+            height: 60px;
         }
 
         .wallpaper-name {
-            padding: 8px;
+            padding: 5px;
             background: var(--bg-medium);
             color: var(--text-primary);
-            font-size: 11px;
+            font-size: 9px;
             text-align: center;
         }
 
         /* About */
         .about-container {
-            padding: 40px;
+            padding: 20px;
             text-align: center;
         }
 
         .about-logo {
-            font-size: 80px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--purple-bright), var(--purple-glow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 60px;
+            font-weight: bold;
+            color: var(--purple-bright);
+            text-shadow: 2px 2px 0 var(--purple-dark);
             margin-bottom: 10px;
         }
 
         .about-title {
-            font-size: 28px;
+            font-size: 18px;
             color: var(--text-primary);
             margin-bottom: 5px;
         }
 
         .about-subtitle {
             color: var(--purple-glow);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .about-info {
             background: var(--bg-medium);
-            border-radius: 12px;
-            padding: 20px;
+            border: 2px inset var(--border-light);
+            padding: 15px;
             text-align: left;
-            max-width: 500px;
+            max-width: 400px;
             margin: 0 auto;
         }
 
         .about-row {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
+            padding: 5px 0;
+            border-bottom: 1px solid var(--border-light);
         }
 
         .about-row:last-child { border-bottom: none; }
         .about-label { color: var(--text-secondary); }
-        .about-value { color: var(--text-primary); }
+        .about-value { color: var(--purple-bright); }
     </style>
 </head>
 <body>
@@ -693,16 +646,16 @@
     <div id="desktop">
         <div id="desktopIcons"></div>
         <div id="windowsContainer"></div>
-
-        <div id="miniPanel">
-            <div id="clockDisplay">00:00</div>
-            <button id="toggleWindows" title="Свернуть/развернуть все окна">
-                <i class="fas fa-layer-group"></i>
-            </button>
-        </div>
-
         <div id="contextMenu"></div>
-        <div id="notifications"></div>
+    </div>
+
+    <!-- Taskbar -->
+    <div id="taskbar" style="display:none;">
+        <div id="taskbarWindows"></div>
+        <div id="taskbarRight">
+            <button class="taskbar-btn" onclick="toggleAllWindows()" title="Свернуть/Развернуть все"><i class="fas fa-layer-group"></i></button>
+            <div id="clockArea">00:00</div>
+        </div>
     </div>
 
     <script>
@@ -742,20 +695,20 @@
         };
 
         const wallpapers = [
-            { name: 'Dark Void', gradient: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%)' },
-            { name: 'Purple Abyss', gradient: 'linear-gradient(135deg, #0a0a0f 0%, #2d1b4e 50%, #0a0a0f 100%)' },
-            { name: 'Violet Storm', gradient: 'linear-gradient(135deg, #1a1a2e 0%, #4a2c7a 50%, #1a1a2e 100%)' },
-            { name: 'Neon Purple', gradient: 'linear-gradient(135deg, #0f0f1a 0%, #6b3fa0 30%, #2d1b4e 70%, #0a0a0f 100%)' },
-            { name: 'Deep Space', gradient: 'linear-gradient(180deg, #0a0a0f 0%, #12121a 50%, #2d1b4e 100%)' },
-            { name: 'Midnight', gradient: 'radial-gradient(ellipse at center, #2d1b4e 0%, #0a0a0f 70%)' },
-            { name: 'Aurora', gradient: 'linear-gradient(45deg, #0a0a0f, #1a1a2e, #4a2c7a, #1a1a2e, #0a0a0f)' },
-            { name: 'Matrix', gradient: 'linear-gradient(135deg, #0a0a0f 0%, #0f1a0f 50%, #0a0a0f 100%)' }
+            { name: 'Dark Void', gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1a1020 50%, #0a0a0a 100%)' },
+            { name: 'Purple Abyss', gradient: 'linear-gradient(135deg, #0a0a0a 0%, #2d1b4e 50%, #0a0a0a 100%)' },
+            { name: 'Violet Storm', gradient: 'linear-gradient(180deg, #0a0a0a 0%, #4a2c7a 50%, #0a0a0a 100%)' },
+            { name: 'Neon Purple', gradient: 'linear-gradient(135deg, #0a0a0a 0%, #6b3fa0 30%, #2d1b4e 70%, #0a0a0a 100%)' },
+            { name: 'Deep Space', gradient: 'linear-gradient(180deg, #000 0%, #1a1020 50%, #2d1b4e 100%)' },
+            { name: 'Midnight', gradient: 'radial-gradient(ellipse at center, #2d1b4e 0%, #0a0a0a 70%)' },
+            { name: 'Matrix', gradient: 'linear-gradient(135deg, #0a0a0a, #1a1a2a, #2d1b4e, #1a1a2a, #0a0a0a)' },
+            { name: 'Obsidian', gradient: 'linear-gradient(180deg, #0a0a0a 0%, #151515 50%, #0a0a0a 100%)' }
         ];
 
         const apps = [
             { id: 'files', name: 'Файлы', icon: 'fa-folder' },
             { id: 'terminal', name: 'Терминал', icon: 'fa-terminal' },
-            { id: 'editor', name: 'Редактор', icon: 'fa-file-code' },
+            { id: 'editor', name: 'Редактор', icon: 'fa-file-alt' },
             { id: 'browser', name: 'Браузер', icon: 'fa-globe' },
             { id: 'settings', name: 'Настройки', icon: 'fa-cog' },
             { id: 'about', name: 'О системе', icon: 'fa-info-circle' },
@@ -770,60 +723,90 @@
             { id: '2048', name: '2048', icon: 'fa-th-large' }
         ];
 
+        // ==================== STARTUP SOUND ====================
+        function playStartupSound() {
+            const audio = new Audio('https://docs.google.com/uc?export=download&id=1oUEGayyu0t--POU-rOBxPxejpR02_d7f');
+            audio.volume = 0.5;
+            audio.play().catch(e => {
+                // Fallback to Web Audio API if Google Drive doesn't work
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [
+                    { freq: 261.63, start: 0, duration: 0.3 },
+                    { freq: 329.63, start: 0.1, duration: 0.3 },
+                    { freq: 392.00, start: 0.2, duration: 0.3 },
+                    { freq: 523.25, start: 0.3, duration: 0.5 },
+                    { freq: 659.25, start: 0.4, duration: 0.5 },
+                    { freq: 783.99, start: 0.5, duration: 0.6 },
+                ];
+                notes.forEach(note => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(note.freq, audioCtx.currentTime + note.start);
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime + note.start);
+                    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + note.start + 0.05);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + note.start + note.duration);
+                    osc.start(audioCtx.currentTime + note.start);
+                    osc.stop(audioCtx.currentTime + note.start + note.duration);
+                });
+            });
+        }
+
         // ==================== BOOT SEQUENCE ====================
         async function boot() {
             const console = document.getElementById('bootConsole');
             const lines = [
+                { text: '', delay: 500 },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '              DUAL COMPUTERS SYSTEMS - BOOT SEQUENCE', class: 'bright' },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
                 { text: '', delay: 300 },
-                { text: '╔══════════════════════════════════════════════════════════════╗', class: 'purple' },
-                { text: '║                                                              ║', class: 'purple' },
-                { text: '║          DUAL COMPUTERS SYSTEMS - BOOT SEQUENCE              ║', class: 'purple' },
-                { text: '║                                                              ║', class: 'purple' },
-                { text: '╚══════════════════════════════════════════════════════════════╝', class: 'purple' },
+                { text: 'dual-machines on dual computers systems is starting up...', class: 'white', delay: 800 },
                 { text: '', delay: 200 },
-                { text: 'dual-machines on dual computers systems is starting up...', class: 'white', delay: 500 },
+                { text: '[INIT] Loading kernel modules...', delay: 300 },
+                { text: '[INIT] Kernel version 6.2.0-dcs loaded', class: 'dim', delay: 150 },
                 { text: '', delay: 100 },
-                { text: '[INIT] Loading kernel modules...', delay: 150 },
-                { text: '[INIT] Kernel version 6.2.0-dcs loaded', class: 'dim', delay: 100 },
-                { text: '', delay: 50 },
-                { text: '[HARDWARE] Detecting hardware configuration...', delay: 200 },
-                { text: '  └─ CPU: Detected multi-core processor', class: 'dim', delay: 80 },
-                { text: '  └─ GPU: Graphics adapter initialized', class: 'dim', delay: 80 },
-                { text: '  └─ USB: Universal Serial Bus controllers ready', class: 'dim', delay: 80 },
-                { text: '  └─ NET: Network interfaces configured', class: 'dim', delay: 80 },
-                { text: '[HARDWARE] Hardware detection complete', class: 'success', delay: 150 },
-                { text: '', delay: 50 },
-                { text: '[MEMORY] Performing RAM check...', delay: 300 },
-                { text: '  └─ Testing memory banks...', class: 'dim', delay: 150 },
-                { text: '  └─ RAM: 16384 MB detected', class: 'dim', delay: 100 },
-                { text: '  └─ Memory timing: DDR4-3200', class: 'dim', delay: 80 },
-                { text: '[MEMORY] RAM check passed', class: 'success', delay: 100 },
-                { text: '', delay: 50 },
-                { text: '[STORAGE] Performing ROM check...', delay: 200 },
-                { text: '  └─ BIOS/UEFI firmware verified', class: 'dim', delay: 100 },
-                { text: '  └─ Boot sector integrity: OK', class: 'dim', delay: 80 },
-                { text: '  └─ System ROM checksum: valid', class: 'dim', delay: 80 },
-                { text: '[STORAGE] ROM check passed', class: 'success', delay: 100 },
-                { text: '', delay: 50 },
-                { text: '[DISK] Mounting filesystems...', delay: 150 },
-                { text: '  └─ /dev/sda1 mounted on /', class: 'dim', delay: 80 },
-                { text: '  └─ /dev/sda2 mounted on /home', class: 'dim', delay: 80 },
-                { text: '[DISK] Filesystems mounted', class: 'success', delay: 100 },
-                { text: '', delay: 50 },
-                { text: '[SERVICES] Starting system services...', delay: 150 },
-                { text: '  └─ dcs-daemon started', class: 'dim', delay: 60 },
-                { text: '  └─ window-manager started', class: 'dim', delay: 60 },
-                { text: '  └─ audio-server started', class: 'dim', delay: 60 },
-                { text: '  └─ network-manager started', class: 'dim', delay: 60 },
-                { text: '[SERVICES] All services running', class: 'success', delay: 100 },
+                { text: '[HARDWARE] Detecting hardware configuration...', delay: 400 },
+                { text: '  > CPU: Detected multi-core processor', class: 'dim', delay: 100 },
+                { text: '  > GPU: Graphics adapter initialized', class: 'dim', delay: 100 },
+                { text: '  > USB: Universal Serial Bus controllers ready', class: 'dim', delay: 100 },
+                { text: '  > NET: Network interfaces configured', class: 'dim', delay: 100 },
+                { text: '[HARDWARE] Complete', class: 'bright', delay: 200 },
                 { text: '', delay: 100 },
-                { text: '[DESKTOP] Initializing graphical interface...', delay: 200 },
-                { text: '[DESKTOP] Loading user session...', delay: 300 },
+                { text: '[MEMORY] Performing RAM check...', delay: 500 },
+                { text: '  > Testing memory banks...', class: 'dim', delay: 200 },
+                { text: '  > Bank 0: OK (8192 MB)', class: 'dim', delay: 100 },
+                { text: '  > Bank 1: OK (8192 MB)', class: 'dim', delay: 100 },
+                { text: '  > Total: 16384 MB detected', class: 'dim', delay: 100 },
+                { text: '[MEMORY] RAM check passed', class: 'bright', delay: 200 },
                 { text: '', delay: 100 },
-                { text: '════════════════════════════════════════════════════════════════', class: 'purple' },
-                { text: '  DUAL COMPUTERS SYSTEMS v1.0 "Dark Matter" - Ready', class: 'purple' },
-                { text: '════════════════════════════════════════════════════════════════', class: 'purple' },
-                { text: '', delay: 500 }
+                { text: '[STORAGE] Performing ROM check...', delay: 400 },
+                { text: '  > BIOS/UEFI firmware verified', class: 'dim', delay: 100 },
+                { text: '  > Boot sector integrity: OK', class: 'dim', delay: 100 },
+                { text: '  > System ROM checksum: valid', class: 'dim', delay: 100 },
+                { text: '[STORAGE] ROM check passed', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[DISK] Mounting filesystems...', delay: 300 },
+                { text: '  > /dev/sda1 mounted on /', class: 'dim', delay: 100 },
+                { text: '  > /dev/sda2 mounted on /home', class: 'dim', delay: 100 },
+                { text: '[DISK] Filesystems mounted', class: 'bright', delay: 200 },
+                { text: '', delay: 100 },
+                { text: '[SERVICES] Starting system services...', delay: 300 },
+                { text: '  > dcs-daemon started', class: 'dim', delay: 80 },
+                { text: '  > window-manager started', class: 'dim', delay: 80 },
+                { text: '  > audio-server started', class: 'dim', delay: 80 },
+                { text: '  > network-manager started', class: 'dim', delay: 80 },
+                { text: '[SERVICES] All services running', class: 'bright', delay: 200 },
+                { text: '', delay: 200 },
+                { text: '[DESKTOP] Initializing graphical interface...', delay: 400 },
+                { text: '[DESKTOP] Loading user session...', delay: 600 },
+                { text: '', delay: 200 },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '  DUAL COMPUTERS SYSTEMS v1.0 "Dark Matter" - Ready', class: 'bright' },
+                { text: '═══════════════════════════════════════════════════════════════', class: 'bright' },
+                { text: '', delay: 1000 }
             ];
 
             for (const line of lines) {
@@ -832,12 +815,17 @@
                 div.textContent = line.text;
                 console.appendChild(div);
                 console.scrollTop = console.scrollHeight;
-                await new Promise(r => setTimeout(r, line.delay || 40));
+                await new Promise(r => setTimeout(r, line.delay || 50));
             }
 
-            await new Promise(r => setTimeout(r, 800));
+            await new Promise(r => setTimeout(r, 500));
+            
+            // Play startup sound
+            playStartupSound();
+            
             document.getElementById('bootConsole').style.display = 'none';
             document.getElementById('desktop').style.display = 'block';
+            document.getElementById('taskbar').style.display = 'flex';
             initDesktop();
         }
 
@@ -847,8 +835,6 @@
             updateClock();
             setInterval(updateClock, 1000);
             applyWallpaper();
-            
-            document.getElementById('toggleWindows').onclick = toggleAllWindows;
             
             document.addEventListener('click', (e) => {
                 document.getElementById('contextMenu').style.display = 'none';
@@ -861,7 +847,6 @@
                 }
             });
 
-            // Mouse events for window management
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
         }
@@ -869,46 +854,33 @@
         function renderDesktopIcons() {
             const container = document.getElementById('desktopIcons');
             
-            // Папка "Разное" со всеми приложениями
-            const miscFolder = document.createElement('div');
-            miscFolder.className = 'desktop-icon';
-            miscFolder.innerHTML = `
-                <div class="desktop-icon-img"><i class="fas fa-folder"></i></div>
-                <div class="desktop-icon-name">Разное</div>
-            `;
-            miscFolder.ondblclick = () => openMiscFolder();
-            container.appendChild(miscFolder);
+            const icons = [
+                { name: 'Разное', icon: 'fa-folder', action: () => openMiscFolder() },
+                { name: 'Терминал', icon: 'fa-terminal', action: () => openApp('terminal') },
+                { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') }
+            ];
 
-            // Терминал
-            const terminal = document.createElement('div');
-            terminal.className = 'desktop-icon';
-            terminal.innerHTML = `
-                <div class="desktop-icon-img"><i class="fas fa-terminal"></i></div>
-                <div class="desktop-icon-name">Терминал</div>
-            `;
-            terminal.ondblclick = () => openApp('terminal');
-            container.appendChild(terminal);
-
-            // Файлы
-            const files = document.createElement('div');
-            files.className = 'desktop-icon';
-            files.innerHTML = `
-                <div class="desktop-icon-img"><i class="fas fa-folder-open"></i></div>
-                <div class="desktop-icon-name">Файлы</div>
-            `;
-            files.ondblclick = () => openApp('files');
-            container.appendChild(files);
+            icons.forEach(icon => {
+                const el = document.createElement('div');
+                el.className = 'desktop-icon';
+                el.innerHTML = `
+                    <div class="desktop-icon-img"><i class="fas ${icon.icon}"></i></div>
+                    <div class="desktop-icon-name">${icon.name}</div>
+                `;
+                el.ondblclick = icon.action;
+                container.appendChild(el);
+            });
         }
 
         function updateClock() {
             const now = new Date();
-            document.getElementById('clockDisplay').textContent = 
+            document.getElementById('clockArea').textContent = 
                 now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
         }
 
         function applyWallpaper() {
-            const wallpaper = wallpapers[DCS.settings.wallpaper];
-            document.getElementById('desktop').style.background = wallpaper.gradient;
+            const wp = wallpapers[DCS.settings.wallpaper];
+            document.getElementById('desktop').style.background = wp.gradient;
         }
 
         function toggleAllWindows() {
@@ -930,22 +902,27 @@
                 <div class="context-item" onclick="openApp('settings')"><i class="fas fa-cog"></i> Настройки</div>
                 <div class="context-item" onclick="openApp('about')"><i class="fas fa-info-circle"></i> О системе</div>
             `;
-            menu.style.left = Math.min(x, window.innerWidth - 220) + 'px';
-            menu.style.top = Math.min(y, window.innerHeight - 300) + 'px';
+            menu.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+            menu.style.top = Math.min(y, window.innerHeight - 250) + 'px';
             menu.style.display = 'block';
         }
 
-        function showNotification(text, type = 'info') {
-            const container = document.getElementById('notifications');
-            const notif = document.createElement('div');
-            notif.className = 'notification';
-            notif.innerHTML = `
-                <span class="notification-icon"><i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i></span>
-                <span class="notification-text">${text}</span>
-                <span class="notification-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></span>
-            `;
-            container.appendChild(notif);
-            setTimeout(() => notif.remove(), 4000);
+        function updateTaskbar() {
+            const container = document.getElementById('taskbarWindows');
+            container.innerHTML = '';
+            DCS.windows.forEach((win, id) => {
+                const el = document.createElement('div');
+                el.className = 'taskbar-item' + (id === DCS.activeWindow ? ' active' : '');
+                el.innerHTML = `<i class="fas ${win.icon}"></i> ${win.title}`;
+                el.onclick = () => {
+                    const winEl = document.getElementById(`window-${id}`);
+                    if (winEl.style.display === 'none') {
+                        winEl.style.display = 'flex';
+                    }
+                    focusWindow(id);
+                };
+                container.appendChild(el);
+            });
         }
 
         // ==================== WINDOW MANAGEMENT ====================
@@ -955,12 +932,10 @@
                 id,
                 title: options.title || 'Window',
                 icon: options.icon || 'fa-window-maximize',
-                width: options.width || 700,
-                height: options.height || 500,
-                x: options.x ?? 100 + (DCS.windows.size * 30) % 200,
-                y: options.y ?? 80 + (DCS.windows.size * 30) % 150,
-                minimized: false,
-                maximized: false,
+                width: options.width || 600,
+                height: options.height || 400,
+                x: options.x ?? 50 + (DCS.windows.size * 25) % 150,
+                y: options.y ?? 50 + (DCS.windows.size * 25) % 100,
                 content: options.content || ''
             };
             
@@ -968,6 +943,7 @@
             DCS.windowOrder.push(id);
             renderWindow(win);
             focusWindow(id);
+            updateTaskbar();
             return id;
         }
 
@@ -981,9 +957,9 @@
                     <span class="window-icon"><i class="fas ${win.icon}"></i></span>
                     <span class="window-title">${win.title}</span>
                     <div class="window-controls">
-                        <button class="window-btn window-btn-minimize" onclick="minimizeWindow(${win.id})"><i class="fas fa-minus"></i></button>
-                        <button class="window-btn window-btn-maximize" onclick="maximizeWindow(${win.id})"><i class="fas fa-square"></i></button>
-                        <button class="window-btn window-btn-close" onclick="closeWindow(${win.id})"><i class="fas fa-times"></i></button>
+                        <button class="window-btn" onclick="minimizeWindow(${win.id})">_</button>
+                        <button class="window-btn" onclick="maximizeWindow(${win.id})">☐</button>
+                        <button class="window-btn" onclick="closeWindow(${win.id})">×</button>
                     </div>
                 </div>
                 <div class="window-content">${win.content}</div>
@@ -996,7 +972,6 @@
                 if (e.target.closest('.window-controls')) return;
                 focusWindow(win.id);
                 const w = DCS.windows.get(win.id);
-                if (w.maximized) return;
                 DCS.dragState = { id: win.id, startX: e.clientX - w.x, startY: e.clientY - w.y };
             };
             
@@ -1022,8 +997,8 @@
             }
             if (DCS.resizeState) {
                 const win = DCS.windows.get(DCS.resizeState.id);
-                win.width = Math.max(350, DCS.resizeState.startW + e.clientX - DCS.resizeState.startX);
-                win.height = Math.max(250, DCS.resizeState.startH + e.clientY - DCS.resizeState.startY);
+                win.width = Math.max(300, DCS.resizeState.startW + e.clientX - DCS.resizeState.startX);
+                win.height = Math.max(200, DCS.resizeState.startH + e.clientY - DCS.resizeState.startY);
                 const el = document.getElementById(`window-${win.id}`);
                 el.style.width = win.width + 'px';
                 el.style.height = win.height + 'px';
@@ -1046,44 +1021,47 @@
                     el.classList.toggle('inactive', wid !== id);
                 }
             });
+            updateTaskbar();
         }
 
         function minimizeWindow(id) {
-            const win = DCS.windows.get(id);
-            win.minimized = !win.minimized;
-            document.getElementById(`window-${id}`).style.display = win.minimized ? 'none' : 'flex';
+            document.getElementById(`window-${id}`).style.display = 'none';
         }
 
         function maximizeWindow(id) {
             const win = DCS.windows.get(id);
             const el = document.getElementById(`window-${id}`);
-            win.maximized = !win.maximized;
-            if (win.maximized) {
+            if (!win.maximized) {
                 win.prevState = { x: win.x, y: win.y, width: win.width, height: win.height };
-                el.style.cssText = `left:0;top:0;width:100%;height:calc(100% - 80px);z-index:${el.style.zIndex};border-radius:0`;
+                win.x = 0; win.y = 0;
+                win.width = window.innerWidth;
+                win.height = window.innerHeight - 32;
+                win.maximized = true;
             } else {
                 Object.assign(win, win.prevState);
-                el.style.cssText = `left:${win.x}px;top:${win.y}px;width:${win.width}px;height:${win.height}px;z-index:${el.style.zIndex}`;
+                win.maximized = false;
             }
+            el.style.cssText = `left:${win.x}px;top:${win.y}px;width:${win.width}px;height:${win.height}px;z-index:${el.style.zIndex}`;
         }
 
         function closeWindow(id) {
             document.getElementById(`window-${id}`)?.remove();
             DCS.windows.delete(id);
             DCS.windowOrder = DCS.windowOrder.filter(i => i !== id);
+            updateTaskbar();
         }
 
         // ==================== APPLICATIONS ====================
         function openApp(appId, params = {}) {
             const handlers = {
-                files: () => openFileManager(params.path || '/home/user'),
+                files: () => openFileManager(params.path),
                 terminal: openTerminal,
                 editor: () => openEditor(params.file),
                 browser: openBrowser,
                 settings: openSettings,
                 about: openAbout,
                 calculator: openCalculator,
-                screenshot: openScreenshot,
+                screenshot: takeScreenshot,
                 paint: openPaint,
                 notes: openNotes,
                 clock: openClock,
@@ -1107,13 +1085,7 @@
             });
             content += '</div>';
             
-            createWindow({
-                title: 'Разное',
-                icon: 'fa-folder',
-                width: 700,
-                height: 500,
-                content
-            });
+            createWindow({ title: 'Разное', icon: 'fa-folder', width: 500, height: 400, content });
         }
 
         // File Manager
@@ -1138,13 +1110,13 @@
                         <button class="app-btn" onclick="this.closest('.window-content').__nav('/')"><i class="fas fa-home"></i></button>
                         <input class="app-input" style="flex:1" value="${currentPath}" readonly>
                     </div>
-                    <div style="display:flex;height:calc(100% - 52px)">
+                    <div style="display:flex;height:calc(100% - 30px)">
                         <div class="fm-sidebar">
                             <div class="fm-section-title">Места</div>
-                            <div class="fm-item ${currentPath === '/home/user' ? 'active' : ''}" onclick="this.closest('.window-content').__go('/home/user')"><i class="fas fa-home"></i> Домой</div>
-                            <div class="fm-item ${currentPath === '/home/user/Documents' ? 'active' : ''}" onclick="this.closest('.window-content').__go('/home/user/Documents')"><i class="fas fa-file-alt"></i> Документы</div>
-                            <div class="fm-item ${currentPath === '/home/user/Downloads' ? 'active' : ''}" onclick="this.closest('.window-content').__go('/home/user/Downloads')"><i class="fas fa-download"></i> Загрузки</div>
-                            <div class="fm-item ${currentPath === '/' ? 'active' : ''}" onclick="this.closest('.window-content').__go('/')"><i class="fas fa-hdd"></i> Корень</div>
+                            <div class="fm-item" onclick="this.closest('.window-content').__go('/home/user')"><i class="fas fa-home"></i> Домой</div>
+                            <div class="fm-item" onclick="this.closest('.window-content').__go('/home/user/Documents')"><i class="fas fa-file-alt"></i> Документы</div>
+                            <div class="fm-item" onclick="this.closest('.window-content').__go('/home/user/Downloads')"><i class="fas fa-download"></i> Загрузки</div>
+                            <div class="fm-item" onclick="this.closest('.window-content').__go('/')"><i class="fas fa-hdd"></i> Корень</div>
                         </div>
                         <div class="fm-content">
                             ${Object.entries(items).map(([name, item]) => `
@@ -1152,33 +1124,34 @@
                                     <div class="fm-file-icon"><i class="fas ${item.type === 'folder' ? 'fa-folder' : 'fa-file-alt'}"></i></div>
                                     <div class="fm-file-name">${name}</div>
                                 </div>
-                            `).join('') || '<div style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:60px"><i class="fas fa-folder-open" style="font-size:48px;opacity:0.3;display:block;margin-bottom:16px"></i>Папка пуста</div>'}
+                            `).join('') || '<div style="padding:20px;color:var(--text-secondary)">Папка пуста</div>'}
                         </div>
                     </div>
                 `;
             }
             
-            const winId = createWindow({ title: 'Файлы — ' + currentPath, icon: 'fa-folder', width: 850, height: 500, content: render() });
+            const winId = createWindow({ title: 'Файлы - ' + currentPath, icon: 'fa-folder', width: 700, height: 450, content: render() });
             
             const contentEl = document.querySelector(`#window-${winId} .window-content`);
-            function setup() {
-                contentEl.__nav = (dir) => {
-                    if (dir === '..') {
-                        const parts = currentPath.split('/').filter(Boolean);
-                        parts.pop();
-                        currentPath = '/' + parts.join('/') || '/';
-                    } else currentPath = dir;
+            contentEl.__nav = (dir) => {
+                if (dir === '..') {
+                    const parts = currentPath.split('/').filter(Boolean);
+                    parts.pop();
+                    currentPath = '/' + parts.join('/');
+                } else currentPath = dir;
+                contentEl.innerHTML = render();
+                document.querySelector(`#window-${winId} .window-title`).textContent = 'Файлы - ' + currentPath;
+            };
+            contentEl.__go = (path) => { currentPath = path; contentEl.innerHTML = render(); };
+            contentEl.__open = (name, type) => {
+                if (type === 'folder') {
+                    currentPath = currentPath === '/' ? '/' + name : currentPath + '/' + name;
                     contentEl.innerHTML = render();
-                    document.querySelector(`#window-${winId} .window-title`).textContent = 'Файлы — ' + currentPath;
-                    setup();
-                };
-                contentEl.__go = (path) => { currentPath = path; contentEl.innerHTML = render(); document.querySelector(`#window-${winId} .window-title`).textContent = 'Файлы — ' + currentPath; setup(); };
-                contentEl.__open = (name, type) => {
-                    if (type === 'folder') { currentPath = currentPath === '/' ? '/' + name : currentPath + '/' + name; contentEl.innerHTML = render(); document.querySelector(`#window-${winId} .window-title`).textContent = 'Файлы — ' + currentPath; setup(); }
-                    else { const folder = getFolder(currentPath); openApp('editor', { file: { name, content: folder.children[name].content } }); }
-                };
-            }
-            setup();
+                } else {
+                    const folder = getFolder(currentPath);
+                    openApp('editor', { file: { name, content: folder.children[name].content } });
+                }
+            };
         }
 
         // Terminal
@@ -1194,15 +1167,14 @@
             }
             
             const winId = createWindow({
-                title: 'Терминал', icon: 'fa-terminal', width: 750, height: 450,
-                content: `<div class="terminal" id="terminal-${DCS.windowId}"><div id="termOutput"></div><div style="display:flex"><span class="terminal-prompt">user@dcs</span>:<span class="terminal-path">~</span>$ <input class="terminal-input" id="termInput" autofocus></div></div>`
+                title: 'Терминал', icon: 'fa-terminal', width: 650, height: 400,
+                content: `<div class="terminal" id="term-${DCS.windowId}"><div id="termOut"></div><div><span class="terminal-prompt">user@dcs</span>:<span class="terminal-path">~</span>$ <input class="terminal-input" id="termIn" autofocus></div></div>`
             });
             
-            const output = document.getElementById('termOutput');
-            const input = document.getElementById('termInput');
+            const output = document.getElementById('termOut');
+            const input = document.getElementById('termIn');
             
-            function updateOutput() { output.innerHTML = history.map(l => `<div class="terminal-line">${l}</div>`).join(''); output.parentElement.scrollTop = output.parentElement.scrollHeight; }
-            function updatePrompt() { input.previousElementSibling.textContent = cwd.replace('/home/user', '~') || '/'; }
+            function updateOutput() { output.innerHTML = history.map(l => `<div class="terminal-line">${l}</div>`).join(''); }
             updateOutput();
             
             input.onkeydown = (e) => {
@@ -1213,34 +1185,50 @@
                     if (cmd) {
                         const [command, ...args] = cmd.split(' ');
                         const commands = {
-                            help: () => 'Available commands: help, ls, cd, pwd, cat, mkdir, touch, rm, clear, date, whoami, neofetch',
-                            ls: () => { const f = getFolder(cwd); return Object.entries(f.children || {}).map(([n, f]) => `<span style="color:${f.type === 'folder' ? 'var(--purple-bright)' : 'var(--text-primary)'}">${n}${f.type === 'folder' ? '/' : ''}</span>`).join('  '); },
-                            cd: () => { if (!args[0] || args[0] === '~') { cwd = '/home/user'; updatePrompt(); return ''; } if (args[0] === '/') { cwd = '/'; updatePrompt(); return ''; } if (args[0] === '..') { const parts = cwd.split('/').filter(Boolean); parts.pop(); cwd = '/' + parts.join('/') || '/'; updatePrompt(); return ''; } const folder = getFolder(cwd); if (folder.children?.[args[0]]?.type === 'folder') { cwd = cwd === '/' ? '/' + args[0] : cwd + '/' + args[0]; updatePrompt(); return ''; } return `cd: ${args[0]}: No such directory`; },
+                            help: () => 'Available: help, ls, cd, pwd, cat, mkdir, touch, rm, clear, date, whoami, neofetch',
+                            ls: () => { const f = getFolder(cwd); return Object.keys(f.children || {}).join('  ') || ''; },
+                            cd: () => {
+                                if (!args[0] || args[0] === '~') { cwd = '/home/user'; return ''; }
+                                if (args[0] === '/') { cwd = '/'; return ''; }
+                                if (args[0] === '..') { const p = cwd.split('/').filter(Boolean); p.pop(); cwd = '/' + p.join('/') || '/'; return ''; }
+                                const f = getFolder(cwd);
+                                if (f.children?.[args[0]]?.type === 'folder') { cwd = cwd === '/' ? '/' + args[0] : cwd + '/' + args[0]; return ''; }
+                                return `cd: ${args[0]}: No such directory`;
+                            },
                             pwd: () => cwd,
-                            cat: () => { if (!args[0]) return 'cat: missing operand'; const f = getFolder(cwd); return f.children?.[args[0]]?.content?.replace(/\n/g, '<br>') || `cat: ${args[0]}: No such file`; },
-                            mkdir: () => { if (!args[0]) return 'mkdir: missing operand'; getFolder(cwd).children[args[0]] = { type: 'folder', children: {} }; return ''; },
-                            touch: () => { if (!args[0]) return 'touch: missing operand'; getFolder(cwd).children[args[0]] = { type: 'file', content: '' }; return ''; },
-                            rm: () => { if (!args[0]) return 'rm: missing operand'; const f = getFolder(cwd); if (f.children?.[args[0]]) { delete f.children[args[0]]; return ''; } return `rm: ${args[0]}: No such file`; },
+                            cat: () => { if (!args[0]) return 'cat: missing file'; const f = getFolder(cwd); return f.children?.[args[0]]?.content || `cat: ${args[0]}: No such file`; },
+                            mkdir: () => { if (!args[0]) return 'mkdir: missing name'; getFolder(cwd).children[args[0]] = { type: 'folder', children: {} }; return ''; },
+                            touch: () => { if (!args[0]) return 'touch: missing name'; getFolder(cwd).children[args[0]] = { type: 'file', content: '' }; return ''; },
+                            rm: () => { if (!args[0]) return 'rm: missing name'; const f = getFolder(cwd); if (f.children?.[args[0]]) { delete f.children[args[0]]; return ''; } return `rm: ${args[0]}: No such file`; },
                             clear: () => { history = []; return ''; },
                             date: () => new Date().toLocaleString('ru-RU'),
                             whoami: () => 'user',
-                            neofetch: () => `<span style="color:var(--purple-bright)">
-       DDDDDDDD      CCCCCCC    SSSSSSSS</span>     user@dcs
-<span style="color:var(--purple-bright)">       DD     DD   CC         SS</span>          ────────────────
-<span style="color:var(--purple-bright)">       DD      DD  CC         SS</span>          <span style="color:var(--purple-glow)">OS:</span> Dual Computers Systems 1.0
-<span style="color:var(--purple-bright)">       DD      DD  CC          SSSSSSS</span>    <span style="color:var(--purple-glow)">Kernel:</span> 6.2.0-dcs
-<span style="color:var(--purple-bright)">       DD      DD  CC                 SS</span>   <span style="color:var(--purple-glow)">Uptime:</span> ${Math.floor(performance.now()/60000)} mins
-<span style="color:var(--purple-bright)">       DD     DD   CC                 SS</span>   <span style="color:var(--purple-glow)">Shell:</span> dcs-shell
-<span style="color:var(--purple-bright)">       DDDDDDDD     CCCCCCC   SSSSSSSS</span>    <span style="color:var(--purple-glow)">Resolution:</span> ${window.innerWidth}x${window.innerHeight}
-                                           <span style="color:var(--purple-glow)">Theme:</span> Dark Matter
-                                           <span style="color:var(--purple-glow)">Terminal:</span> dcs-terminal
-
-<span style="background:#6b21a8">   </span><span style="background:#7c3aed">   </span><span style="background:#8b5cf6">   </span><span style="background:#a78bfa">   </span><span style="background:#c4b5fd">   </span><span style="background:#000">   </span><span style="background:#1a1a2e">   </span><span style="background:#2d1b4e">   </span>`
+                            neofetch: () => `
+<span style="color:var(--purple-glow)">
+      RRRRRRRRRRRRRRRRRR
+      RR::::::::::::::RR
+      RR::::RRRRRR:::::RR
+      RR:::RR     RR:::RR
+      RR:::RR     RR:::RR       </span><span style="color:var(--purple-bright)">user@dcs</span>
+<span style="color:var(--purple-glow)">      RR:::RRRRRR:::::RR       </span>--------------------------
+<span style="color:var(--purple-glow)">      RR::::::::::::::RR       </span><span style="color:var(--purple-bright)">OS:</span> Dual Computers Systems 1.0
+<span style="color:var(--purple-glow)">      RR:::RRRRRR::RR          </span><span style="color:var(--purple-bright)">Host:</span> DCS Virtual Machine
+<span style="color:var(--purple-glow)">      RR:::RR    RR::RR        </span><span style="color:var(--purple-bright)">Kernel:</span> 6.2.0-dcs
+<span style="color:var(--purple-glow)">      RR:::RR     RR::RR       </span><span style="color:var(--purple-bright)">Uptime:</span> ${Math.floor(performance.now()/60000)} mins
+<span style="color:var(--purple-glow)">      RR:::RR      RR::RR      </span><span style="color:var(--purple-bright)">Shell:</span> dcs-shell
+<span style="color:var(--purple-glow)">      RR:::RR       RR::RR     </span><span style="color:var(--purple-bright)">Resolution:</span> ${window.innerWidth}x${window.innerHeight}
+<span style="color:var(--purple-glow)">      RRRRRR         RRRRRR    </span><span style="color:var(--purple-bright)">DE:</span> DCS Desktop
+                                <span style="color:var(--purple-bright)">Theme:</span> Dark Matter
+                                <span style="color:var(--purple-bright)">Terminal:</span> dcs-term
+                                <span style="color:var(--purple-bright)">CPU:</span> Virtual (${navigator.hardwareConcurrency} cores)
+                                <span style="color:var(--purple-bright)">Memory:</span> 16384 MB
+`
                         };
                         const result = commands[command] ? commands[command]() : `${command}: command not found`;
                         if (result) history.push(result);
                     }
                     updateOutput(); input.value = '';
+                    input.parentElement.querySelector('.terminal-path').textContent = cwd.replace('/home/user', '~') || '/';
                 }
             };
             setTimeout(() => input.focus(), 100);
@@ -1249,15 +1237,12 @@
         // Editor
         function openEditor(file) {
             createWindow({
-                title: file ? file.name + ' — Редактор' : 'Новый файл — Редактор',
-                icon: 'fa-file-code',
-                width: 700,
-                height: 480,
+                title: file ? file.name + ' - Редактор' : 'Новый файл - Редактор', icon: 'fa-file-alt', width: 600, height: 400,
                 content: `
                     <div class="app-toolbar">
-                        <button class="app-btn" onclick="const t=this.closest('.window-content').querySelector('textarea').value;const b=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='file.txt';a.click();showNotification('Файл сохранён','success')"><i class="fas fa-save"></i> Сохранить</button>
+                        <button class="app-btn" onclick="const t=this.closest('.window-content').querySelector('textarea').value;const b=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='document.txt';a.click()"><i class="fas fa-save"></i> Сохранить</button>
                     </div>
-                    <textarea style="width:100%;height:calc(100% - 52px);background:var(--bg-dark);color:var(--text-primary);border:none;padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;resize:none;outline:none">${file?.content || ''}</textarea>
+                    <textarea style="width:100%;height:calc(100% - 30px);background:#000;color:var(--purple-bright);border:none;padding:10px;font-family:Consolas,monospace;font-size:12px;resize:none;outline:none">${file?.content || ''}</textarea>
                 `
             });
         }
@@ -1265,57 +1250,37 @@
         // Browser
         function openBrowser() {
             createWindow({
-                title: 'Браузер',
-                icon: 'fa-globe',
-                width: 1000,
-                height: 650,
+                title: 'Браузер', icon: 'fa-globe', width: 900, height: 600,
                 content: `
                     <div class="app-toolbar">
-                        <button class="app-btn" onclick="this.closest('.window-content').querySelector('iframe').src=this.closest('.window-content').querySelector('iframe').src"><i class="fas fa-redo"></i></button>
+                        <button class="app-btn" onclick="this.closest('.window-content').querySelector('iframe').contentWindow.location.reload()"><i class="fas fa-redo"></i></button>
                         <input class="app-input" style="flex:1" value="https://www.google.com" id="browserUrl">
                         <button class="app-btn" onclick="this.closest('.window-content').querySelector('iframe').src=document.getElementById('browserUrl').value"><i class="fas fa-arrow-right"></i></button>
                     </div>
-                    <iframe src="https://www.google.com/webhp?igu=1" style="width:100%;height:calc(100% - 52px);border:none"></iframe>
+                    <iframe src="https://www.google.com/webhp?igu=1" style="width:100%;height:calc(100% - 30px);border:none"></iframe>
                 `
             });
         }
 
         // Settings
         function openSettings() {
-            let content = `
-                <div style="padding:30px">
-                    <h2 style="color:var(--text-primary);margin-bottom:20px">Настройки</h2>
-                    <h3 style="color:var(--purple-glow);margin-bottom:15px">Обои рабочего стола</h3>
-                    <div class="settings-grid">
-            `;
-            
+            let content = `<div style="padding:15px"><h3 style="color:var(--purple-bright);margin-bottom:15px">Настройки</h3><h4 style="color:var(--purple-glow);margin-bottom:10px">Обои</h4><div class="settings-grid">`;
             wallpapers.forEach((w, i) => {
                 content += `
-                    <div class="wallpaper-option ${DCS.settings.wallpaper === i ? 'active' : ''}" onclick="DCS.settings.wallpaper=${i};applyWallpaper();document.querySelectorAll('.wallpaper-option').forEach(e=>e.classList.remove('active'));this.classList.add('active');showNotification('Обои изменены: ${w.name}','success')">
+                    <div class="wallpaper-option ${DCS.settings.wallpaper === i ? 'active' : ''}" onclick="DCS.settings.wallpaper=${i};applyWallpaper();document.querySelectorAll('.wallpaper-option').forEach(e=>e.classList.remove('active'));this.classList.add('active')">
                         <div class="wallpaper-preview" style="background:${w.gradient}"></div>
                         <div class="wallpaper-name">${w.name}</div>
                     </div>
                 `;
             });
-            
             content += '</div></div>';
-            
-            createWindow({
-                title: 'Настройки',
-                icon: 'fa-cog',
-                width: 700,
-                height: 500,
-                content
-            });
+            createWindow({ title: 'Настройки', icon: 'fa-cog', width: 550, height: 400, content });
         }
 
         // About
         function openAbout() {
             createWindow({
-                title: 'О системе',
-                icon: 'fa-info-circle',
-                width: 500,
-                height: 480,
+                title: 'О системе', icon: 'fa-info-circle', width: 400, height: 380,
                 content: `
                     <div class="about-container">
                         <div class="about-logo">DCS</div>
@@ -1334,20 +1299,15 @@
 
         // Calculator
         function openCalculator() {
-            let display = '0', prev = null, op = null, waitOp = false;
-            const winId = createWindow({ title: 'Калькулятор', icon: 'fa-calculator', width: 320, height: 420, content: '' });
+            let display = '0';
+            const winId = createWindow({ title: 'Калькулятор', icon: 'fa-calculator', width: 280, height: 350, content: '' });
             
             function render() {
                 return `
-                    <div style="padding:20px;background:var(--bg-dark);height:100%">
-                        <div style="background:var(--bg-medium);padding:20px;border-radius:10px;text-align:right;font-size:32px;color:var(--purple-glow);margin-bottom:20px;min-height:60px;font-family:'JetBrains Mono',monospace" id="calcDisplay">${display}</div>
-                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-                            ${['C','±','%','÷','7','8','9','×','4','5','6','-','1','2','3','+','0','.','⌫','='].map(b => {
-                                let bg = 'var(--purple-dark)';
-                                if (['÷','×','-','+','='].includes(b)) bg = 'var(--purple-medium)';
-                                if (['C','±','%'].includes(b)) bg = 'var(--bg-light)';
-                                return `<button style="padding:18px;border:none;border-radius:10px;font-size:18px;cursor:pointer;background:${bg};color:var(--text-primary);transition:all 0.2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" onclick="window.__calc('${b}')">${b}</button>`;
-                            }).join('')}
+                    <div style="padding:10px;background:#000;height:100%">
+                        <div style="background:var(--bg-dark);border:2px inset var(--border-light);padding:10px;text-align:right;font-size:24px;color:var(--purple-glow);margin-bottom:10px;font-family:Consolas" id="calcDisplay">${display}</div>
+                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                            ${['C','±','%','÷','7','8','9','×','4','5','6','-','1','2','3','+','0','.','⌫','='].map(b => `<button style="padding:12px;background:linear-gradient(180deg,var(--bg-light),var(--bg-dark));border:2px outset var(--border-light);font-size:16px;cursor:pointer;color:var(--text-primary)" onclick="window.__calc('${b}')">${b}</button>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1355,85 +1315,69 @@
             
             document.querySelector(`#window-${winId} .window-content`).innerHTML = render();
             
+            let prev = null, op = null, waitOp = false;
             window.__calc = (b) => {
-                const dispEl = document.getElementById('calcDisplay');
-                if (!dispEl) return;
                 if (b >= '0' && b <= '9' || b === '.') { display = waitOp ? b : (display === '0' && b !== '.' ? b : display + b); waitOp = false; }
-                else if (['+','-','×','÷'].includes(b)) { if (op && !waitOp) calculate(); prev = parseFloat(display); op = b; waitOp = true; }
-                else if (b === '=') { calculate(); op = null; }
+                else if (['+','-','×','÷'].includes(b)) { prev = parseFloat(display); op = b; waitOp = true; }
+                else if (b === '=') {
+                    const cur = parseFloat(display);
+                    if (op === '+') display = String(prev + cur);
+                    else if (op === '-') display = String(prev - cur);
+                    else if (op === '×') display = String(prev * cur);
+                    else if (op === '÷') display = cur !== 0 ? String(prev / cur) : 'Error';
+                    op = null; waitOp = true;
+                }
                 else if (b === 'C') { display = '0'; prev = null; op = null; }
                 else if (b === '±') { display = String(-parseFloat(display)); }
                 else if (b === '%') { display = String(parseFloat(display) / 100); }
                 else if (b === '⌫') { display = display.length > 1 ? display.slice(0, -1) : '0'; }
-                dispEl.textContent = display;
+                document.getElementById('calcDisplay').textContent = display;
             };
-            
-            function calculate() {
-                const cur = parseFloat(display);
-                let r = cur;
-                if (op === '+') r = prev + cur;
-                else if (op === '-') r = prev - cur;
-                else if (op === '×') r = prev * cur;
-                else if (op === '÷') r = cur !== 0 ? prev / cur : 'Err';
-                display = String(typeof r === 'number' ? Math.round(r * 1e10) / 1e10 : r);
-                waitOp = true;
-            }
         }
 
         // Screenshot
-        async function openScreenshot() {
-            showNotification('Создание скриншота...', 'info');
-            try {
-                const canvas = await html2canvas(document.getElementById('desktop'), { useCORS: true, scale: 1 });
-                const link = document.createElement('a');
-                link.download = `dcs-screenshot-${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                showNotification('Скриншот сохранён!', 'success');
-            } catch (e) {
-                showNotification('Ошибка создания скриншота', 'error');
-            }
+        async function takeScreenshot() {
+            const canvas = await html2canvas(document.body);
+            const link = document.createElement('a');
+            link.download = `dcs-screenshot-${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
         }
 
         // Paint
         function openPaint() {
             const winId = createWindow({
-                title: 'Рисование', icon: 'fa-paint-brush', width: 800, height: 550,
+                title: 'Рисование', icon: 'fa-paint-brush', width: 650, height: 450,
                 content: `
                     <div class="app-toolbar">
-                        <input type="color" id="paintColor" value="#8b5cf6" style="width:40px;height:32px;border:none;border-radius:6px;cursor:pointer">
-                        <input type="range" id="paintSize" min="1" max="50" value="5" style="width:100px">
-                        <span style="color:var(--text-primary);font-size:12px" id="paintSizeLabel">5px</span>
-                        <button class="app-btn" onclick="window.__clearCanvas()"><i class="fas fa-trash"></i> Очистить</button>
-                        <button class="app-btn" onclick="window.__saveCanvas()"><i class="fas fa-save"></i> Сохранить</button>
+                        <input type="color" id="paintColor" value="#8b5cf6" style="border:2px inset var(--border-light)">
+                        <input type="range" id="paintSize" min="1" max="30" value="3" style="width:80px">
+                        <button class="app-btn" onclick="window.__clearPaint()"><i class="fas fa-trash"></i> Очистить</button>
+                        <button class="app-btn" onclick="window.__savePaint()"><i class="fas fa-save"></i> Сохранить</button>
                     </div>
-                    <canvas id="paintCanvas" style="cursor:crosshair;display:block"></canvas>
+                    <canvas id="paintCanvas" style="cursor:crosshair"></canvas>
                 `
             });
             
             setTimeout(() => {
                 const canvas = document.getElementById('paintCanvas');
                 const ctx = canvas.getContext('2d');
-                canvas.width = 798; canvas.height = 450;
-                ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                canvas.width = 644; canvas.height = 380;
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                let drawing = false, lastX = 0, lastY = 0;
+                let drawing = false, lastX, lastY;
                 canvas.onmousedown = (e) => { drawing = true; [lastX, lastY] = [e.offsetX, e.offsetY]; };
                 canvas.onmousemove = (e) => {
                     if (!drawing) return;
-                    ctx.beginPath();
                     ctx.strokeStyle = document.getElementById('paintColor').value;
                     ctx.lineWidth = document.getElementById('paintSize').value;
                     ctx.lineCap = 'round';
-                    ctx.moveTo(lastX, lastY);
-                    ctx.lineTo(e.offsetX, e.offsetY);
-                    ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
                     [lastX, lastY] = [e.offsetX, e.offsetY];
                 };
                 canvas.onmouseup = canvas.onmouseleave = () => drawing = false;
-                document.getElementById('paintSize').oninput = (e) => document.getElementById('paintSizeLabel').textContent = e.target.value + 'px';
-                window.__clearCanvas = () => { ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, canvas.width, canvas.height); };
-                window.__saveCanvas = () => { const a = document.createElement('a'); a.href = canvas.toDataURL(); a.download = 'artwork.png'; a.click(); showNotification('Сохранено!', 'success'); };
+                window.__clearPaint = () => { ctx.fillStyle = '#000'; ctx.fillRect(0, 0, canvas.width, canvas.height); };
+                window.__savePaint = () => { const a = document.createElement('a'); a.href = canvas.toDataURL(); a.download = 'drawing.png'; a.click(); };
             }, 50);
         }
 
@@ -1441,32 +1385,23 @@
         function openNotes() {
             const notes = localStorage.getItem('dcs-notes') || '';
             createWindow({
-                title: 'Заметки', icon: 'fa-sticky-note', width: 400, height: 400,
-                content: `<textarea style="width:100%;height:100%;background:var(--bg-dark);color:var(--text-primary);border:none;padding:20px;resize:none;outline:none;font-size:14px" placeholder="Введите заметки..." oninput="localStorage.setItem('dcs-notes',this.value)">${notes}</textarea>`
+                title: 'Заметки', icon: 'fa-sticky-note', width: 350, height: 300,
+                content: `<textarea style="width:100%;height:100%;background:#000;color:var(--purple-bright);border:none;padding:10px;resize:none;outline:none;font-size:12px" oninput="localStorage.setItem('dcs-notes',this.value)">${notes}</textarea>`
             });
         }
 
         // Clock
         function openClock() {
-            const winId = createWindow({ title: 'Часы', icon: 'fa-clock', width: 350, height: 380, content: '' });
+            const winId = createWindow({ title: 'Часы', icon: 'fa-clock', width: 250, height: 300, content: '' });
             
             function update() {
                 const now = new Date();
-                const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
                 const el = document.querySelector(`#window-${winId} .window-content`);
                 if (!el) return;
                 el.innerHTML = `
-                    <div style="padding:30px;text-align:center;background:var(--bg-dark);height:100%">
-                        <div style="font-size:56px;color:var(--purple-glow);font-weight:300;font-family:'JetBrains Mono',monospace;margin-bottom:10px">${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}</div>
-                        <div style="color:var(--text-secondary);margin-bottom:40px">${now.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-                        <svg width="180" height="180" viewBox="0 0 200 200">
-                            <circle cx="100" cy="100" r="95" fill="none" stroke="var(--purple-dark)" stroke-width="4"/>
-                            ${[...Array(12)].map((_, i) => `<line x1="100" y1="15" x2="100" y2="25" stroke="var(--purple-medium)" stroke-width="2" transform="rotate(${i*30} 100 100)"/>`).join('')}
-                            <line x1="100" y1="100" x2="100" y2="50" stroke="var(--purple-glow)" stroke-width="4" stroke-linecap="round" transform="rotate(${(h%12)*30 + m/2} 100 100)"/>
-                            <line x1="100" y1="100" x2="100" y2="35" stroke="var(--purple-bright)" stroke-width="3" stroke-linecap="round" transform="rotate(${m*6} 100 100)"/>
-                            <line x1="100" y1="100" x2="100" y2="28" stroke="var(--text-secondary)" stroke-width="2" stroke-linecap="round" transform="rotate(${s*6} 100 100)"/>
-                            <circle cx="100" cy="100" r="6" fill="var(--purple-glow)"/>
-                        </svg>
+                    <div style="padding:20px;text-align:center;background:#000;height:100%">
+                        <div style="font-size:40px;color:var(--purple-glow);font-family:Consolas">${now.toLocaleTimeString('ru-RU')}</div>
+                        <div style="color:var(--text-secondary);margin-top:10px">${now.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
                     </div>
                 `;
             }
@@ -1475,12 +1410,10 @@
         }
 
         // ==================== GAMES ====================
-        
-        // Snake
         function openSnake() {
-            const winId = createWindow({ title: 'Змейка', icon: 'fa-gamepad', width: 440, height: 520, content: `
+            const winId = createWindow({ title: 'Змейка', icon: 'fa-gamepad', width: 420, height: 480, content: `
                 <div class="game-container">
-                    <div class="game-info"><span class="game-score"><i class="fas fa-star"></i> <span id="snakeScore">0</span></span><button class="app-btn" onclick="window.__startSnake()"><i class="fas fa-play"></i> Старт</button></div>
+                    <div class="game-info"><span class="game-score">Счёт: <span id="snakeScore">0</span></span><button class="app-btn" onclick="window.__startSnake()"><i class="fas fa-play"></i> Старт</button></div>
                     <canvas id="snakeCanvas" class="game-canvas" width="400" height="400"></canvas>
                 </div>
             ` });
@@ -1489,17 +1422,17 @@
             const ctx = canvas.getContext('2d');
             let snake, food, dir, score, loop;
             
-            function init() { snake = [{x:10,y:10}]; dir = {x:1,y:0}; score = 0; placeFood(); document.getElementById('snakeScore').textContent = score; }
+            function init() { snake = [{x:10,y:10}]; dir = {x:1,y:0}; score = 0; placeFood(); }
             function placeFood() { food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) }; }
             function draw() {
-                ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, 400, 400);
-                snake.forEach((s, i) => { ctx.fillStyle = i === 0 ? '#8b5cf6' : '#6b3fa0'; ctx.fillRect(s.x * 20 + 1, s.y * 20 + 1, 18, 18); });
-                ctx.fillStyle = '#a78bfa'; ctx.beginPath(); ctx.arc(food.x * 20 + 10, food.y * 20 + 10, 8, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 400, 400);
+                ctx.fillStyle = '#6b3fa0'; snake.forEach(s => ctx.fillRect(s.x * 20 + 1, s.y * 20 + 1, 18, 18));
+                ctx.fillStyle = '#8b5cf6'; ctx.fillRect(food.x * 20 + 1, food.y * 20 + 1, 18, 18);
             }
             function update() {
                 const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
                 if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.some(s => s.x === head.x && s.y === head.y)) {
-                    clearInterval(loop); showNotification(`Игра окончена! Счёт: ${score}`, 'info'); return;
+                    clearInterval(loop); return;
                 }
                 snake.unshift(head);
                 if (head.x === food.x && head.y === food.y) { score++; document.getElementById('snakeScore').textContent = score; placeFood(); }
@@ -1508,41 +1441,36 @@
             }
             
             document.addEventListener('keydown', (e) => {
-                const dirs = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
-                if (dirs[e.key] && (dirs[e.key].x !== -dir.x || dirs[e.key].y !== -dir.y)) { e.preventDefault(); dir = dirs[e.key]; }
+                const d = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
+                if (d[e.key] && (d[e.key].x !== -dir.x || d[e.key].y !== -dir.y)) { e.preventDefault(); dir = d[e.key]; }
             });
             
             window.__startSnake = () => { clearInterval(loop); init(); draw(); loop = setInterval(update, 100); };
             init(); draw();
         }
 
-        // Tetris
         function openTetris() {
-            const winId = createWindow({ title: 'Тетрис', icon: 'fa-th', width: 320, height: 520, content: `
+            const winId = createWindow({ title: 'Тетрис', icon: 'fa-th', width: 260, height: 480, content: `
                 <div class="game-container">
-                    <div class="game-info"><span class="game-score"><i class="fas fa-star"></i> <span id="tetrisScore">0</span></span><button class="app-btn" onclick="window.__startTetris()"><i class="fas fa-play"></i> Старт</button></div>
+                    <div class="game-info"><span class="game-score">Счёт: <span id="tetrisScore">0</span></span><button class="app-btn" onclick="window.__startTetris()"><i class="fas fa-play"></i></button></div>
                     <canvas id="tetrisCanvas" class="game-canvas" width="200" height="400"></canvas>
                 </div>
             ` });
             
             const canvas = document.getElementById('tetrisCanvas');
             const ctx = canvas.getContext('2d');
-            const cols = 10, rows = 20, size = 20;
             const shapes = [[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
-            const colors = ['#8b5cf6','#7c3aed','#6d28d9','#5b21b6','#4c1d95','#a78bfa','#c4b5fd'];
             let board, piece, pieceX, pieceY, pieceType, score, loop;
             
-            function init() { board = Array(rows).fill().map(() => Array(cols).fill(0)); score = 0; newPiece(); document.getElementById('tetrisScore').textContent = score; }
-            function newPiece() { pieceType = Math.floor(Math.random() * shapes.length); piece = shapes[pieceType]; pieceX = Math.floor(cols / 2) - 1; pieceY = 0; if (collision()) { clearInterval(loop); showNotification(`Игра окончена! Счёт: ${score}`, 'info'); } }
-            function collision() { for (let y = 0; y < piece.length; y++) for (let x = 0; x < piece[y].length; x++) if (piece[y][x] && (board[pieceY + y]?.[pieceX + x] !== 0 || pieceX + x < 0 || pieceX + x >= cols || pieceY + y >= rows)) return true; return false; }
+            function init() { board = Array(20).fill().map(() => Array(10).fill(0)); score = 0; newPiece(); }
+            function newPiece() { pieceType = Math.floor(Math.random() * shapes.length); piece = shapes[pieceType]; pieceX = 4; pieceY = 0; if (collision()) clearInterval(loop); }
+            function collision() { for (let y = 0; y < piece.length; y++) for (let x = 0; x < piece[y].length; x++) if (piece[y][x] && (board[pieceY + y]?.[pieceX + x] !== 0 || pieceX + x < 0 || pieceX + x >= 10 || pieceY + y >= 20)) return true; return false; }
             function merge() { for (let y = 0; y < piece.length; y++) for (let x = 0; x < piece[y].length; x++) if (piece[y][x]) board[pieceY + y][pieceX + x] = pieceType + 1; }
-            function clearLines() { for (let y = rows - 1; y >= 0; y--) if (board[y].every(c => c)) { board.splice(y, 1); board.unshift(Array(cols).fill(0)); score += 100; y++; } document.getElementById('tetrisScore').textContent = score; }
-            function rotate() { const rotated = piece[0].map((_, i) => piece.map(r => r[i]).reverse()); const old = piece; piece = rotated; if (collision()) piece = old; }
+            function clearLines() { for (let y = 19; y >= 0; y--) if (board[y].every(c => c)) { board.splice(y, 1); board.unshift(Array(10).fill(0)); score += 100; y++; } document.getElementById('tetrisScore').textContent = score; }
             function draw() {
-                ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, 200, 400);
-                for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) if (board[y][x]) { ctx.fillStyle = colors[board[y][x] - 1]; ctx.fillRect(x * size + 1, y * size + 1, size - 2, size - 2); }
-                ctx.fillStyle = colors[pieceType];
-                for (let y = 0; y < piece.length; y++) for (let x = 0; x < piece[y].length; x++) if (piece[y][x]) ctx.fillRect((pieceX + x) * size + 1, (pieceY + y) * size + 1, size - 2, size - 2);
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 200, 400);
+                for (let y = 0; y < 20; y++) for (let x = 0; x < 10; x++) if (board[y][x]) { ctx.fillStyle = '#6b3fa0'; ctx.fillRect(x * 20 + 1, y * 20 + 1, 18, 18); }
+                ctx.fillStyle = '#8b5cf6'; for (let y = 0; y < piece.length; y++) for (let x = 0; x < piece[y].length; x++) if (piece[y][x]) ctx.fillRect((pieceX + x) * 20 + 1, (pieceY + y) * 20 + 1, 18, 18);
             }
             function update() { pieceY++; if (collision()) { pieceY--; merge(); clearLines(); newPiece(); } draw(); }
             
@@ -1550,7 +1478,7 @@
                 if (e.key === 'ArrowLeft') { pieceX--; if (collision()) pieceX++; }
                 else if (e.key === 'ArrowRight') { pieceX++; if (collision()) pieceX--; }
                 else if (e.key === 'ArrowDown') { pieceY++; if (collision()) pieceY--; }
-                else if (e.key === 'ArrowUp') rotate();
+                else if (e.key === 'ArrowUp') { const r = piece[0].map((_, i) => piece.map(r => r[i]).reverse()); const o = piece; piece = r; if (collision()) piece = o; }
                 draw();
             });
             
@@ -1558,11 +1486,10 @@
             init(); draw();
         }
 
-        // Pong
         function openPong() {
-            const winId = createWindow({ title: 'Понг', icon: 'fa-table-tennis', width: 520, height: 420, content: `
+            const winId = createWindow({ title: 'Понг', icon: 'fa-table-tennis', width: 520, height: 400, content: `
                 <div class="game-container">
-                    <div class="game-info"><span class="game-score"><span id="pongScore1">0</span> : <span id="pongScore2">0</span></span><button class="app-btn" onclick="window.__startPong()"><i class="fas fa-play"></i> Старт</button></div>
+                    <div class="game-info"><span class="game-score"><span id="pongScore1">0</span> : <span id="pongScore2">0</span></span><button class="app-btn" onclick="window.__startPong()"><i class="fas fa-play"></i></button></div>
                     <canvas id="pongCanvas" class="game-canvas" width="480" height="320"></canvas>
                 </div>
             ` });
@@ -1571,24 +1498,19 @@
             const ctx = canvas.getContext('2d');
             let ball, p1, p2, score1, score2, loop;
             
-            function init() { ball = {x:240,y:160,vx:4,vy:2}; p1 = p2 = 130; score1 = score2 = 0; updateScore(); }
-            function updateScore() { document.getElementById('pongScore1').textContent = score1; document.getElementById('pongScore2').textContent = score2; }
+            function init() { ball = {x:240,y:160,vx:4,vy:2}; p1 = p2 = 130; score1 = score2 = 0; }
             function draw() {
-                ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, 480, 320);
-                ctx.fillStyle = '#8b5cf6';
-                ctx.fillRect(10, p1, 10, 60);
-                ctx.fillRect(460, p2, 10, 60);
-                ctx.fillStyle = '#a78bfa';
-                ctx.beginPath(); ctx.arc(ball.x, ball.y, 8, 0, Math.PI * 2); ctx.fill();
-                ctx.setLineDash([5, 5]); ctx.beginPath(); ctx.moveTo(240, 0); ctx.lineTo(240, 320); ctx.strokeStyle = '#2d1b4e'; ctx.stroke(); ctx.setLineDash([]);
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 480, 320);
+                ctx.fillStyle = '#6b3fa0'; ctx.fillRect(10, p1, 10, 60); ctx.fillRect(460, p2, 10, 60);
+                ctx.fillStyle = '#8b5cf6'; ctx.beginPath(); ctx.arc(ball.x, ball.y, 8, 0, Math.PI * 2); ctx.fill();
             }
             function update() {
                 ball.x += ball.vx; ball.y += ball.vy;
                 if (ball.y <= 8 || ball.y >= 312) ball.vy = -ball.vy;
                 if (ball.x <= 28 && ball.y >= p1 && ball.y <= p1 + 60) ball.vx = -ball.vx;
                 if (ball.x >= 452 && ball.y >= p2 && ball.y <= p2 + 60) ball.vx = -ball.vx;
-                if (ball.x < 0) { score2++; updateScore(); ball = {x:240,y:160,vx:4,vy:2}; }
-                if (ball.x > 480) { score1++; updateScore(); ball = {x:240,y:160,vx:-4,vy:2}; }
+                if (ball.x < 0) { score2++; document.getElementById('pongScore2').textContent = score2; ball = {x:240,y:160,vx:4,vy:2}; }
+                if (ball.x > 480) { score1++; document.getElementById('pongScore1').textContent = score1; ball = {x:240,y:160,vx:-4,vy:2}; }
                 if (p2 + 30 < ball.y) p2 = Math.min(260, p2 + 3);
                 if (p2 + 30 > ball.y) p2 = Math.max(0, p2 - 3);
                 draw();
@@ -1603,27 +1525,25 @@
             init(); draw();
         }
 
-        // 2048
         function open2048() {
-            const winId = createWindow({ title: '2048', icon: 'fa-th-large', width: 400, height: 480, content: '' });
+            const winId = createWindow({ title: '2048', icon: 'fa-th-large', width: 350, height: 420, content: '' });
             let grid, score;
             
             function init() { grid = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]; score = 0; addTile(); addTile(); }
-            function addTile() { const empty = []; for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) if (!grid[y][x]) empty.push({x, y}); if (empty.length) { const {x, y} = empty[Math.floor(Math.random() * empty.length)]; grid[y][x] = Math.random() < 0.9 ? 2 : 4; } }
-            function getColor(v) { const c = {0:'var(--bg-light)',2:'#4c1d95',4:'#5b21b6',8:'#6d28d9',16:'#7c3aed',32:'#8b5cf6',64:'#a78bfa',128:'#c4b5fd',256:'#ddd6fe',512:'#ede9fe',1024:'#f5f3ff',2048:'#fff'}; return c[v] || '#6b3fa0'; }
+            function addTile() { const e = []; for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) if (!grid[y][x]) e.push({x, y}); if (e.length) { const {x, y} = e[Math.floor(Math.random() * e.length)]; grid[y][x] = Math.random() < 0.9 ? 2 : 4; } }
+            function getColor(v) { return v ? `hsl(${270 - Math.log2(v) * 15}, 60%, ${30 + Math.log2(v) * 5}%)` : '#1a1a1a'; }
             function render() {
                 const el = document.querySelector(`#window-${winId} .window-content`);
                 if (!el) return;
                 el.innerHTML = `
-                    <div style="padding:20px;background:var(--bg-dark);height:100%">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:15px">
-                            <span style="color:var(--purple-glow);font-size:18px">Счёт: ${score}</span>
+                    <div style="padding:15px;background:#000;height:100%">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+                            <span style="color:var(--purple-glow)">Счёт: ${score}</span>
                             <button class="app-btn" onclick="window.__start2048()"><i class="fas fa-redo"></i></button>
                         </div>
-                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--bg-medium);padding:10px;border-radius:12px">
-                            ${grid.flat().map(v => `<div style="height:75px;display:flex;align-items:center;justify-content:center;background:${getColor(v)};border-radius:8px;font-size:${v > 512 ? '18' : '24'}px;font-weight:bold;color:${v > 64 ? '#1a1a2e' : '#fff'}">${v || ''}</div>`).join('')}
+                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;background:var(--bg-dark);padding:5px;border:2px inset var(--border-light)">
+                            ${grid.flat().map(v => `<div style="height:60px;display:flex;align-items:center;justify-content:center;background:${getColor(v)};font-size:20px;font-weight:bold;color:${v > 4 ? '#fff' : 'var(--purple-bright)'}">${v || ''}</div>`).join('')}
                         </div>
-                        <div style="color:var(--text-secondary);font-size:12px;margin-top:15px;text-align:center">Стрелки для управления</div>
                     </div>
                 `;
             }
@@ -1644,8 +1564,8 @@
             }
             
             document.addEventListener('keydown', (e) => {
-                const dirs = { ArrowLeft: 0, ArrowUp: 1, ArrowRight: 2, ArrowDown: 3 };
-                if (dirs[e.key] !== undefined) { e.preventDefault(); move(dirs[e.key]); }
+                const d = { ArrowLeft: 0, ArrowUp: 1, ArrowRight: 2, ArrowDown: 3 };
+                if (d[e.key] !== undefined) { e.preventDefault(); move(d[e.key]); }
             });
             
             window.__start2048 = () => { init(); render(); };
