@@ -778,9 +778,7 @@
             
             document.addEventListener('click', () => {
                 if (firstClickTime && (Date.now() - firstClickTime > 10000)) {
-                    const sound = new Audio('click.mp3');
-                    sound.volume = 0.3;
-                    sound.play().catch(() => {});
+                    new Audio('click.mp3').play().catch(() => {});
                 }
             });
         }
