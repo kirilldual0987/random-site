@@ -759,6 +759,44 @@
             background: linear-gradient(180deg, var(--purple-medium) 0%, var(--purple-dark) 100%);
         }
 
+        /* Game Download Items */
+        .game-download-item {
+            background: var(--bg-medium);
+            border: 2px outset var(--border-light);
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.1s;
+        }
+
+        .game-download-item:hover {
+            background: var(--purple-dark);
+            border-color: var(--purple-medium);
+        }
+
+        .game-download-item:active {
+            border-style: inset;
+        }
+
+        .game-download-icon {
+            font-size: 32px;
+            color: var(--purple-bright);
+            margin-bottom: 8px;
+        }
+
+        .game-download-name {
+            color: var(--text-primary);
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .game-download-size {
+            color: var(--text-secondary);
+            font-size: 9px;
+        }
+
         /* Animations */
         @keyframes fadeInDesktop {
             from {
@@ -1303,6 +1341,7 @@
                 { name: 'Разное', icon: 'fa-folder', action: () => openMiscFolder() },
                 { name: 'Терминал', icon: 'fa-terminal', action: () => openApp('terminal') },
                 { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') },
+                { name: 'Пиратские игры', icon: 'fa-skull-crossbones', action: () => openGamesFolder() },
                 { name: 'Turn Off', icon: 'fa-power-off', action: () => showShutdownDialog() }
             ];
 
@@ -1517,6 +1556,73 @@
                 '2048': open2048
             };
             if (handlers[appId]) handlers[appId]();
+        }
+
+        // Download Games Folder
+        const pirateGames = [
+            { 
+                name: 'OneShot WME', 
+                icon: 'fa-sun', 
+                url: 'https://drive.usercontent.google.com/download?id=1peNBgKyVIhAImJlOe-6prZD-Zsmv9UjS&export=download&authuser=0&confirm=t&uuid=8ad1db72-cce5-4cb7-877a-f51ccc1c85fe&at=APcXIO3oa2i9QFE_r7NNQtGCd5_a%3A1769124308248',
+                size: '~500 MB'
+            }
+        ];
+
+        function openGamesFolder() {
+            let content = `
+                <div style="padding:15px;background:var(--bg-dark);height:100%;">
+                    <div style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--purple-dark);">
+                        <div style="color:var(--purple-glow);font-size:14px;font-weight:bold;">
+                            <i class="fas fa-skull-crossbones"></i> Пиратские игры
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;">
+            `;
+            
+            pirateGames.forEach(game => {
+                content += `
+                    <div class="game-download-item" onclick="downloadGame('${game.url}', '${game.name}')">
+                        <div class="game-download-icon"><i class="fas ${game.icon}"></i></div>
+                        <div class="game-download-name">${game.name}</div>
+                        <div class="game-download-size">${game.size}</div>
+                    </div>
+                `;
+            });
+            
+            content += `
+                    </div>
+                </div>
+            `;
+            
+            createWindow({ 
+                title: 'Пиратские игры', 
+                icon: 'fa-skull-crossbones', 
+                width: 500, 
+                height: 400, 
+                content 
+            });
+        }
+
+        function downloadGame(url, name) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = name;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Показываем уведомление
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position:fixed;bottom:50px;right:10px;
+                background:var(--bg-medium);border:2px outset var(--border-light);
+                padding:10px 15px;color:var(--purple-glow);font-size:11px;
+                z-index:9999;
+            `;
+            notification.innerHTML = `<i class="fas fa-download"></i> Загрузка "${name}" начата...`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
         }
 
         function openMiscFolder() {
