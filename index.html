@@ -676,6 +676,173 @@
         .about-row:last-child { border-bottom: none; }
         .about-label { color: var(--text-secondary); }
         .about-value { color: var(--purple-bright); }
+
+        /* Shutdown Dialog */
+        #shutdownDialog {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .shutdown-dialog-box {
+            background: var(--bg-medium);
+            border: 2px outset var(--border-light);
+            padding: 0;
+            min-width: 350px;
+        }
+
+        .shutdown-dialog-header {
+            background: linear-gradient(180deg, var(--purple-medium) 0%, var(--purple-dark) 100%);
+            padding: 5px 10px;
+            color: var(--text-primary);
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .shutdown-dialog-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .shutdown-dialog-text {
+            margin-bottom: 20px;
+        }
+
+        .shutdown-dialog-text .strikethrough {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            font-size: 11px;
+        }
+
+        .shutdown-dialog-text .correction {
+            color: var(--purple-bright);
+            font-size: 10px;
+            font-style: italic;
+            margin-left: 5px;
+        }
+
+        .shutdown-dialog-text .main-text {
+            color: var(--text-primary);
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .shutdown-dialog-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .shutdown-dialog-btn {
+            padding: 8px 25px;
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-dark) 100%);
+            border: 2px outset var(--border-light);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .shutdown-dialog-btn:active {
+            border-style: inset;
+        }
+
+        .shutdown-dialog-btn:hover {
+            background: var(--purple-dark);
+        }
+
+        .shutdown-dialog-btn.yes {
+            background: linear-gradient(180deg, var(--purple-medium) 0%, var(--purple-dark) 100%);
+        }
+
+        /* Animations */
+        @keyframes fadeInDesktop {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOutDesktop {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .desktop-fade-in {
+            animation: fadeInDesktop 0.8s ease-out forwards;
+        }
+
+        .desktop-fade-out {
+            animation: fadeOutDesktop 0.5s ease-out forwards;
+        }
+
+        .taskbar-fade-in {
+            animation: fadeInDesktop 0.8s ease-out forwards;
+        }
+
+        .taskbar-fade-out {
+            animation: fadeOutDesktop 0.5s ease-out forwards;
+        }
+
+        /* Splash Screen */
+        #splashScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 25%, #2d1b4e 50%, #1a0a2e 75%, #0a0a0a 100%);
+            z-index: 10002;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .splash-content {
+            text-align: center;
+        }
+
+        .splash-logo {
+            font-size: 72px;
+            font-weight: bold;
+            color: var(--purple-bright);
+            text-shadow: 
+                0 0 20px var(--purple-medium),
+                0 0 40px var(--purple-dark),
+                0 0 60px var(--purple-dark);
+            font-family: 'Tahoma', sans-serif;
+            letter-spacing: 4px;
+        }
+
+        .splash-subtitle {
+            font-size: 28px;
+            color: var(--purple-glow);
+            margin-top: 10px;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+        }
+
+        @keyframes splashPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Pixel Transition Canvas */
+        #pixelTransition {
+            position: fixed;
+            inset: 0;
+            z-index: 10003;
+            display: none;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -702,6 +869,35 @@
         <div id="taskbarRight">
             <button class="taskbar-btn" onclick="toggleAllWindows()" title="Свернуть/Развернуть все"><i class="fas fa-layer-group"></i></button>
             <div id="clockArea">00:00</div>
+        </div>
+    </div>
+
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-logo">Dual-Computers</div>
+            <div class="splash-subtitle">Systems</div>
+        </div>
+    </div>
+
+    <!-- Pixel Transition Canvas -->
+    <canvas id="pixelTransition"></canvas>
+
+    <!-- Shutdown Dialog -->
+    <div id="shutdownDialog">
+        <div class="shutdown-dialog-box">
+            <div class="shutdown-dialog-header">Dual Computers Systems</div>
+            <div class="shutdown-dialog-content">
+                <div class="shutdown-dialog-text">
+                    <span class="strikethrough">вы действительно хотите выключить миров.....</span>
+                    <span class="correction">нет, не тот текст</span>
+                    <div class="main-text">Вы действительно хотите выключить Dual-machines?</div>
+                </div>
+                <div class="shutdown-dialog-buttons">
+                    <button class="shutdown-dialog-btn yes" onclick="confirmShutdown()">ДА</button>
+                    <button class="shutdown-dialog-btn" onclick="cancelShutdown()">НЕТ</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -796,11 +992,37 @@
             });
         }
 
+        // ==================== SHUTDOWN DIALOG ====================
+        function showShutdownDialog() {
+            document.getElementById('shutdownDialog').style.display = 'flex';
+        }
+
+        function cancelShutdown() {
+            document.getElementById('shutdownDialog').style.display = 'none';
+        }
+
+        function confirmShutdown() {
+            document.getElementById('shutdownDialog').style.display = 'none';
+            shutdownSystem();
+        }
+
         // ==================== SHUTDOWN ====================
         async function shutdownSystem() {
+            const desktop = document.getElementById('desktop');
+            const taskbar = document.getElementById('taskbar');
+            
+            // Add fade out animation
+            desktop.classList.add('desktop-fade-out');
+            taskbar.classList.add('taskbar-fade-out');
+            
+            // Wait for animation
+            await new Promise(r => setTimeout(r, 500));
+            
             // Hide desktop and taskbar
-            document.getElementById('desktop').style.display = 'none';
-            document.getElementById('taskbar').style.display = 'none';
+            desktop.style.display = 'none';
+            taskbar.style.display = 'none';
+            desktop.classList.remove('desktop-fade-out');
+            taskbar.classList.remove('taskbar-fade-out');
             
             // Show console
             const consoleEl = document.getElementById('bootConsole');
@@ -947,13 +1169,109 @@
 
             await new Promise(r => setTimeout(r, 500));
             
+            // Hide console
+            document.getElementById('bootConsole').style.display = 'none';
+            
             // Play startup sound
             playStartupSound();
             
-            document.getElementById('bootConsole').style.display = 'none';
-            document.getElementById('desktop').style.display = 'block';
-            document.getElementById('taskbar').style.display = 'flex';
+            // Show splash screen
+            const splash = document.getElementById('splashScreen');
+            splash.style.display = 'flex';
+            
+            // Wait for splash to display (static, no animation)
+            await new Promise(r => setTimeout(r, 2000));
+            
+            // Start pixel transition (desktop is prepared inside this function)
+            await pixelDissolveTransition();
+        }
+
+        // Pixel dissolve transition effect
+        async function pixelDissolveTransition() {
+            const canvas = document.getElementById('pixelTransition');
+            const ctx = canvas.getContext('2d');
+            const splash = document.getElementById('splashScreen');
+            const desktop = document.getElementById('desktop');
+            const taskbar = document.getElementById('taskbar');
+            
+            // Set canvas size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Draw splash screen to canvas using html2canvas
+            const splashCanvas = await html2canvas(splash, {
+                backgroundColor: null,
+                scale: 1
+            });
+            
+            // Prepare desktop BEHIND the canvas (hidden but ready)
+            desktop.style.display = 'block';
+            desktop.style.opacity = '1';
+            taskbar.style.display = 'flex';
+            taskbar.style.opacity = '1';
             initDesktop();
+            
+            // Hide original splash, show canvas on top
+            splash.style.display = 'none';
+            canvas.style.display = 'block';
+            
+            // Draw original splash to canvas
+            ctx.drawImage(splashCanvas, 0, 0, canvas.width, canvas.height);
+            
+            // Wait to show original image
+            await new Promise(r => setTimeout(r, 500));
+            
+            // Pixel size for effect
+            const pixelSize = 10;
+            const cols = Math.ceil(canvas.width / pixelSize);
+            const rows = Math.ceil(canvas.height / pixelSize);
+            
+            // Get image data for pixelation
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw pixelated version
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const px = x * pixelSize;
+                    const py = y * pixelSize;
+                    
+                    // Sample color from center of pixel block
+                    const sampleX = Math.min(px + pixelSize / 2, canvas.width - 1);
+                    const sampleY = Math.min(py + pixelSize / 2, canvas.height - 1);
+                    const i = (Math.floor(sampleY) * canvas.width + Math.floor(sampleX)) * 4;
+                    
+                    const r = imageData.data[i];
+                    const g = imageData.data[i + 1];
+                    const b = imageData.data[i + 2];
+                    const a = imageData.data[i + 3];
+                    
+                    ctx.fillStyle = `rgba(${r},${g},${b},${a / 255})`;
+                    ctx.fillRect(px, py, pixelSize, pixelSize);
+                }
+            }
+            
+            // Wait a moment to show pixelated version
+            await new Promise(r => setTimeout(r, 400));
+            
+            // Dissolve pixels row by row from top to bottom
+            for (let row = 0; row < rows; row++) {
+                // Clear entire row with slight randomness in timing
+                for (let x = 0; x < cols; x++) {
+                    // Add slight horizontal randomness
+                    const delay = Math.random() * 10;
+                    setTimeout(() => {
+                        ctx.clearRect(x * pixelSize, row * pixelSize, pixelSize, pixelSize);
+                    }, delay);
+                }
+                
+                // Wait before next row
+                await new Promise(r => setTimeout(r, 12));
+            }
+            
+            // Hide canvas completely
+            await new Promise(r => setTimeout(r, 100));
+            canvas.style.display = 'none';
         }
 
         // ==================== DESKTOP ====================
@@ -985,7 +1303,7 @@
                 { name: 'Разное', icon: 'fa-folder', action: () => openMiscFolder() },
                 { name: 'Терминал', icon: 'fa-terminal', action: () => openApp('terminal') },
                 { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') },
-                { name: 'Turn Off', icon: 'fa-power-off', action: () => shutdownSystem() }
+                { name: 'Turn Off', icon: 'fa-power-off', action: () => showShutdownDialog() }
             ];
 
             icons.forEach(icon => {
