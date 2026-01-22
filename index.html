@@ -770,6 +770,32 @@
             { id: '2048', name: '2048', icon: 'fa-th-large' }
         ];
 
+        // ==================== CLICK SOUND ====================
+        let clickSoundEnabled = false;
+        let firstClickTime = null;
+        const clickAudio = new Audio('click.mp3');
+        clickAudio.volume = 0.3;
+
+        function initClickSound() {
+            firstClickTime = Date.now();
+            
+            document.addEventListener('click', () => {
+                if (clickSoundEnabled && firstClickTime && (Date.now() - firstClickTime > 10000)) {
+                    const sound = clickAudio.cloneNode();
+                    sound.volume = 0.3;
+                    sound.play().catch(() => {});
+                }
+            });
+            
+            document.addEventListener('mousedown', () => {
+                if (clickSoundEnabled && firstClickTime && (Date.now() - firstClickTime > 10000)) {
+                    const sound = clickAudio.cloneNode();
+                    sound.volume = 0.2;
+                    sound.play().catch(() => {});
+                }
+            });
+        }
+
         // ==================== STARTUP SOUND ====================
         function playStartupSound() {
             const audio = new Audio('DCS-startup.mp3');
@@ -1691,6 +1717,11 @@
         document.getElementById('clickToStart').addEventListener('click', function() {
             this.style.display = 'none';
             document.getElementById('bootConsole').style.display = 'block';
+            
+            // Initialize click sound system
+            initClickSound();
+            clickSoundEnabled = true;
+            
             boot();
         });
     </script>
