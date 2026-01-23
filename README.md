@@ -17,4 +17,4 @@ random site made by kirilldual
 
 
 
-now it is runget-simulator clone 
+now it is DCS
