@@ -1342,6 +1342,10 @@
                 { name: 'Терминал', icon: 'fa-terminal', action: () => openApp('terminal') },
                 { name: 'Файлы', icon: 'fa-folder-open', action: () => openApp('files') },
                 { name: 'Пиратские игры', icon: 'fa-skull-crossbones', action: () => openGamesFolder() },
+                { name: 'DGC', icon: 'fa-gamepad', action: () => openDGC() },
+                { name: 'Telegram', icon: 'fa-telegram', action: () => openTelegramFolder() },
+                { name: 'Каналы', icon: 'fa-play-circle', action: () => openChannelsFolder() },
+                { name: 'GitHub', icon: 'fa-github', action: () => openGitHubFolder() },
                 { name: 'Turn Off', icon: 'fa-power-off', action: () => showShutdownDialog() }
             ];
 
@@ -1563,7 +1567,85 @@
             { 
                 name: 'OneShot WME', 
                 icon: 'fa-sun', 
-                url: 'https://drive.usercontent.google.com/download?id=1peNBgKyVIhAImJlOe-6prZD-Zsmv9UjS&export=download&authuser=0&confirm=t&uuid=8ad1db72-cce5-4cb7-877a-f51ccc1c85fe&at=APcXIO3oa2i9QFE_r7NNQtGCd5_a%3A1769124308248',
+                url: 'https://drive.usercontent.google.com/download?id=1peNBgKyVIhAImJlOe-6prZD-Zsmv9UjS&export=download&confirm=t',
+                size: '~500 MB'
+            },
+            { 
+                name: 'Schedule 1', 
+                icon: 'fa-calendar-alt', 
+                url: 'https://drive.usercontent.google.com/download?id=1MdVl40loEy9ToHuz442c830J4w9Isy7m&export=download&confirm=t',
+                size: '~2 GB'
+            },
+            { 
+                name: 'КЛЕТЬ (KLETKA)', 
+                icon: 'fa-cube', 
+                url: 'https://drive.usercontent.google.com/download?id=1RegCu8zToWbv-u81w9GGpg9ZdXigO98F&export=download&confirm=t',
+                size: '~1 GB'
+            },
+            { 
+                name: 'Zompiercer', 
+                icon: 'fa-train', 
+                url: 'https://drive.usercontent.google.com/download?id=10cQ66HhzJg1eM2y00Gc-iVcjS-HZfLyv&export=download&confirm=t',
+                size: '~3 GB'
+            },
+            { 
+                name: 'Hello Neighbor', 
+                icon: 'fa-house-user', 
+                url: 'https://drive.usercontent.google.com/download?id=1xcCodWG3bE4dfkKkp2gHyaOetrchITbt&export=download&confirm=t',
+                size: '~2 GB'
+            },
+            { 
+                name: 'FNAF: Into The Pit', 
+                icon: 'fa-ghost', 
+                url: 'https://drive.usercontent.google.com/download?id=1nwvnx_yNRVWTlWVqfeELZj8L1t5y0MKA&export=download&confirm=t',
+                size: '~1.5 GB'
+            },
+            { 
+                name: 'Tin Can', 
+                icon: 'fa-rocket', 
+                url: 'https://drive.usercontent.google.com/download?id=12SXweGlCSfJNrX7s4pSgET52TuqQpWAp&export=download&confirm=t',
+                size: '~500 MB'
+            },
+            { 
+                name: 'My Summer Car', 
+                icon: 'fa-car', 
+                url: 'https://drive.usercontent.google.com/download?id=1caiQuBgdDwYfs1EBTwpX1jDOi7d8cHmf&export=download&confirm=t',
+                size: '~800 MB'
+            },
+            { 
+                name: 'Exit 8', 
+                icon: 'fa-door-open', 
+                url: 'https://drive.usercontent.google.com/download?id=1pesmN_NXzsUlH1Z2Lts5vDtxM4zicPvE&export=download&confirm=t',
+                size: '~2 GB'
+            },
+            { 
+                name: 'R.E.P.O.', 
+                icon: 'fa-users', 
+                url: 'https://disk.yandex.ru/d/OOnUlKtk7SPI4g',
+                size: '~1.5 GB'
+            },
+            { 
+                name: 'GTA 3 (HD)', 
+                icon: 'fa-city', 
+                url: 'https://drive.usercontent.google.com/download?id=1byT3J2ArNqLelLmdhwJGnq1pmIg-QRi0&export=download&confirm=t',
+                size: '~4 GB'
+            },
+            { 
+                name: 'Stray', 
+                icon: 'fa-cat', 
+                url: 'https://drive.usercontent.google.com/download?id=1wYKlItqPwG70wvJH8DujOZl2SomDPQZ5&export=download&confirm=t',
+                size: '~7 GB'
+            },
+            { 
+                name: 'Drive Beyond Horizons', 
+                icon: 'fa-road', 
+                url: 'https://drive.usercontent.google.com/download?id=1o9JqdNuafFYkEsuejuFtPf3UK_nVHx-F&export=download&confirm=t',
+                size: '~3 GB'
+            },
+            { 
+                name: 'FNAF 1-2-3-4 + Halloween', 
+                icon: 'fa-mask', 
+                url: 'https://drive.usercontent.google.com/download?id=1hX-JhDaT4i_Ap4iXJaHSQNXt7L4f17lf&export=download&confirm=t',
                 size: '~500 MB'
             }
         ];
@@ -1623,6 +1705,134 @@
             notification.innerHTML = `<i class="fas fa-download"></i> Загрузка "${name}" начата...`;
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
+        }
+
+        // DGC - Dual Gaming Centre
+        function openDGC() {
+            createWindow({
+                title: 'DGC - Dual Gaming Centre',
+                icon: 'fa-gamepad',
+                width: 1000,
+                height: 650,
+                content: `
+                    <div class="app-toolbar">
+                        <button class="app-btn" onclick="this.closest('.window-content').querySelector('iframe').src=this.closest('.window-content').querySelector('iframe').src"><i class="fas fa-sync"></i> Обновить</button>
+                        <button class="app-btn" onclick="window.open('https://kolyadual.github.io/dualgamingcentre/new.html','_blank')"><i class="fas fa-external-link-alt"></i> Открыть в браузере</button>
+                    </div>
+                    <iframe src="https://kolyadual.github.io/dualgamingcentre/new.html" style="width:100%;height:calc(100% - 30px);border:none;background:#000"></iframe>
+                `
+            });
+        }
+
+        // Telegram каналы
+        function openTelegramFolder() {
+            const channels = [
+                { name: 'DGC Official', icon: 'fa-gamepad', url: 'https://t.me/DGC_off' },
+                { name: 'Runget OS', icon: 'fa-laptop', url: 'https://t.me/runget_rt' }
+            ];
+            
+            let content = `
+                <div style="padding:15px;background:var(--bg-dark);height:100%;">
+                    <div style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--purple-dark);">
+                        <div style="color:var(--purple-glow);font-size:14px;font-weight:bold;">
+                            <i class="fab fa-telegram"></i> Наши Telegram каналы
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+            `;
+            
+            channels.forEach(channel => {
+                content += `
+                    <div class="game-download-item" onclick="window.open('${channel.url}','_blank')">
+                        <div class="game-download-icon"><i class="fas ${channel.icon}"></i></div>
+                        <div class="game-download-name">${channel.name}</div>
+                    </div>
+                `;
+            });
+            
+            content += `</div></div>`;
+            
+            createWindow({ 
+                title: 'Telegram каналы', 
+                icon: 'fa-telegram', 
+                width: 400, 
+                height: 300, 
+                content 
+            });
+        }
+
+        // Каналы на разных платформах
+        function openChannelsFolder() {
+            const channels = [
+                { name: 'Dzen - Binary', icon: 'fa-newspaper', url: 'https://dzen.ru/binary' },
+                { name: 'YouTube', icon: 'fa-youtube', url: 'https://www.youtube.com/channel/UChevVs3tuWf8a_mvpd2i_ng' }
+            ];
+            
+            let content = `
+                <div style="padding:15px;background:var(--bg-dark);height:100%;">
+                    <div style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--purple-dark);">
+                        <div style="color:var(--purple-glow);font-size:14px;font-weight:bold;">
+                            <i class="fas fa-play-circle"></i> Наши каналы
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+            `;
+            
+            channels.forEach(channel => {
+                content += `
+                    <div class="game-download-item" onclick="window.open('${channel.url}','_blank')">
+                        <div class="game-download-icon"><i class="fab ${channel.icon}"></i></div>
+                        <div class="game-download-name">${channel.name}</div>
+                    </div>
+                `;
+            });
+            
+            content += `</div></div>`;
+            
+            createWindow({ 
+                title: 'Наши каналы', 
+                icon: 'fa-play-circle', 
+                width: 400, 
+                height: 300, 
+                content 
+            });
+        }
+
+        // GitHub
+        function openGitHubFolder() {
+            const repos = [
+                { name: 'Kolyadual', icon: 'fa-user', url: 'https://github.com/Kolyadual' },
+                { name: 'kirilldual0987', icon: 'fa-user', url: 'https://github.com/kirilldual0987' }
+            ];
+            
+            let content = `
+                <div style="padding:15px;background:var(--bg-dark);height:100%;">
+                    <div style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--purple-dark);">
+                        <div style="color:var(--purple-glow);font-size:14px;font-weight:bold;">
+                            <i class="fab fa-github"></i> Наши GitHub
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+            `;
+            
+            repos.forEach(repo => {
+                content += `
+                    <div class="game-download-item" onclick="window.open('${repo.url}','_blank')">
+                        <div class="game-download-icon"><i class="fas ${repo.icon}"></i></div>
+                        <div class="game-download-name">${repo.name}</div>
+                    </div>
+                `;
+            });
+            
+            content += `</div></div>`;
+            
+            createWindow({ 
+                title: 'Наши GitHub', 
+                icon: 'fa-github', 
+                width: 400, 
+                height: 300, 
+                content 
+            });
         }
 
         function openMiscFolder() {
