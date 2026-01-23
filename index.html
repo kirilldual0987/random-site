@@ -1346,6 +1346,7 @@
                 { name: 'Telegram', icon: 'fa-telegram', action: () => openTelegramFolder() },
                 { name: 'Каналы', icon: 'fa-play-circle', action: () => openChannelsFolder() },
                 { name: 'GitHub', icon: 'fa-github', action: () => openGitHubFolder() },
+                { name: 'kirilldual0987', icon: 'fa-code', action: () => openKirilldualDev() },
                 { name: 'Turn Off', icon: 'fa-power-off', action: () => showShutdownDialog() }
             ];
 
@@ -1795,6 +1796,23 @@
                 width: 400, 
                 height: 300, 
                 content 
+            });
+        }
+
+        // kirilldual0987 Developer
+        function openKirilldualDev() {
+            createWindow({
+                title: 'kirilldual0987 - Developer',
+                icon: 'fa-code',
+                width: 1000,
+                height: 650,
+                content: `
+                    <div class="app-toolbar">
+                        <button class="app-btn" onclick="this.closest('.window-content').querySelector('iframe').src=this.closest('.window-content').querySelector('iframe').src"><i class="fas fa-sync"></i> Обновить</button>
+                        <button class="app-btn" onclick="window.open('https://kirilldual0987.github.io/kirilldual/','_blank')"><i class="fas fa-external-link-alt"></i> Открыть в браузере</button>
+                    </div>
+                    <iframe src="https://kirilldual0987.github.io/kirilldual/" style="width:100%;height:calc(100% - 30px);border:none;background:#000"></iframe>
+                `
             });
         }
 
